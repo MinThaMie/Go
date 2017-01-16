@@ -1,4 +1,4 @@
-package go;
+package game;
 
 public class Board {
 
