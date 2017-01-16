@@ -43,6 +43,13 @@ public class Board {
 		return x * dim + y;
 	}
 	
+	int[] coordinate(int i) {
+		int y = i / dim;
+		int x = i % dim;
+		int[] coordinate = {x, y};
+		return coordinate;
+	}
+	
 	int getBoardSize() {
 		return this.dim;
 	}
