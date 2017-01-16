@@ -9,8 +9,14 @@ public class RandomStrategy implements Strategy {
 	public String getName() {
 		return this.name;
 	}
-	
+	//TODO: Fix the infinite loop
 	public int determineMove(Board b, Stone s) {
-		return (int) Math.random();
+		double random = Math.random();
+		int index = (int) (random * b.getBoardSize());
+		while (!b.isEmpty(index)) {
+			random = Math.random();
+			index = (int) (random * b.getBoardSize());
+		} 
+		return index;
 	}
 }
