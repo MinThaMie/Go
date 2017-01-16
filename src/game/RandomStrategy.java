@@ -1,5 +1,8 @@
 package game;
 
+import java.util.*;
+
+
 public class RandomStrategy implements Strategy {
 	String name;
 	public RandomStrategy() {
@@ -9,14 +12,21 @@ public class RandomStrategy implements Strategy {
 	public String getName() {
 		return this.name;
 	}
-	//TODO: Fix the infinite loop
+	
 	public int determineMove(Board b, Stone s) {
-		double random = Math.random();
-		int index = (int) (random * b.getBoardSize());
-		while (!b.isEmpty(index)) {
-			random = Math.random();
-			index = (int) (random * b.getBoardSize());
+		List<Integer> emptyFields = new LinkedList<Integer>();
+		for (int i = 0; i < b.getBoardSize() * b.getBoardSize(); i++) {
+			if (b.isEmpty(i)) {
+				emptyFields.add(i);
+			}
+		}
+
+		int size = emptyFields.size();
+		while (emptyFields.size() > 0) {
+			double random = Math.random();
+			int index = (int) (random * size);
+			return emptyFields.get(index);
 		} 
-		return index;
+		return -1;
 	}
 }
