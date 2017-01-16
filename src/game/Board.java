@@ -24,23 +24,30 @@ public class Board {
 		return x * dim + y;
 	}
 	
-	private void setField(int i, Stone s) {
+	//------Setters------
+	/**
+	 * This function sets a field on the board to the provided stone.
+	 * This function is package private.
+	 * @param i: index of the field
+	 * @param s: the stone placed
+	 */
+	void setField(int i, Stone s) {
 		if (isField(i)) {
 			fields[i] = s;
 		}
 		System.out.println(i + ": " + fields[i]);
 	}
-	
-	private void setField(int x, int y, Stone s) {
+	/**
+	 * This function overloads the function above does the same.
+	 * Uses the index-function to determine the index of the requested point.
+	 * @param x: x-coordinate
+	 * @param y: y-coordinate
+	 * @param s: the stone placed
+	 */
+	void setField(int x, int y, Stone s) {
 		int index = index(x, y);
 		if (isField(index)) {
 			fields[index] = s;
 		}
-	}
-	
-	public static void main(String[] args) {
-		Board b = new Board(5);
-		b.setField(3, Stone.BLACK);
-		b.setField(1, 1, Stone.WHITE);
 	}
 }
