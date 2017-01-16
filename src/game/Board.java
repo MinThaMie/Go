@@ -11,20 +11,43 @@ public class Board {
 			setField(i, Stone.EMPTY);
 		}
 	}
-	
-	private boolean isField(int i) {
-		return i > 0 && i < fields.length;
+	//Getters TODO: correct name?
+	/**
+	 * This function tests whether a index is a field on the board.
+	 * @param i: index of the queried field
+	 * @return boolean true if the field is on the board
+	 */
+	boolean isField(int i) {
+		return i >= 0 && i < fields.length;
 	}
-	
-	private boolean isEmpty(int i) {
-		return fields[i] == Stone.EMPTY;
+	//TODO: Find out what common practice is with these kind of functions
+	// overloading a function or using the index function
+	private boolean isField(int x, int y) {
+		int index = index(x, y);
+		return index > 0 && index < fields.length;
+	}
+	/**
+	 * This function checks whether a field is empty or not.
+	 * @param i: index of the queried field
+	 * @return boolean true if the field is empty
+	 */
+	boolean isEmpty(int i) {
+		if (isField(i)) {
+			return fields[i] == Stone.EMPTY;
+		} else {
+			return false;
+		}
 	}
 	
 	private int index(int x, int y) {
 		return x * dim + y;
 	}
 	
-	//------Setters------
+	int getBoardSize() {
+		return this.dim;
+	}
+	
+	//Setters TODO: correct name?
 	/**
 	 * This function sets a field on the board to the provided stone.
 	 * This function is package private.
@@ -35,7 +58,6 @@ public class Board {
 		if (isField(i)) {
 			fields[i] = s;
 		}
-		System.out.println(i + ": " + fields[i]);
 	}
 	/**
 	 * This function overloads the function above does the same.
