@@ -24,6 +24,11 @@ public class Game {
 			b.setField(move, stone);
 			int[] coor = b.coordinate(move);
 			gogui.addStone(coor[0], coor[1], white);
+			try {
+				Thread.sleep(500);
+			} catch (InterruptedException e)  {
+				System.out.println("Yo, i've been interupted");
+			}
 		}
 	}
 }
