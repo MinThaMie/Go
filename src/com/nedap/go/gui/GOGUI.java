@@ -38,12 +38,12 @@ public interface GOGUI {
     void clearBoard();
 
     /**
-     * Starts the GO graphical user interface
+     * Starts the GO graphical user interface.
      */
     void startGUI();
 
     /**
-     * Stops the GO graphical user interface
+     * Stops the GO graphical user interface.
      */
     void stopGUI();
 

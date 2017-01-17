@@ -32,8 +32,7 @@ public class GoGUIIntegrator implements GOGUI {
         Platform.runLater(() -> {
             try {
                 wrappee.addStone(x, y, white);
-            }
-            catch (InvalidCoordinateException e) {
+            } catch (InvalidCoordinateException e) {
                 e.printStackTrace();
             }
         });
@@ -44,8 +43,7 @@ public class GoGUIIntegrator implements GOGUI {
         Platform.runLater(() -> {
             try {
                 wrappee.removeStone(x, y);
-            }
-            catch (InvalidCoordinateException e) {
+            } catch (InvalidCoordinateException e) {
                 e.printStackTrace();
             }
         });
@@ -75,8 +73,7 @@ public class GoGUIIntegrator implements GOGUI {
             while (!GOGUIImpl.isInstanceAvailable()) {
                 try {
                     Thread.sleep(20);
-                }
-                catch (InterruptedException e) {
+                } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
             }

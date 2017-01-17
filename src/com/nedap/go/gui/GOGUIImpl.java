@@ -76,8 +76,7 @@ public class GOGUIImpl extends Application {
 
         try {
             waitForConfigurationLatch.await();
-        }
-        catch (InterruptedException e) {
+        } catch (InterruptedException e) {
             e.printStackTrace();
         }
 
@@ -89,8 +88,7 @@ public class GOGUIImpl extends Application {
 
         if (showStartupAnimation) {
             runStartupAnimation();
-        }
-        else {
+        } else {
             initializationLatch.countDown();
         }
     }
@@ -112,7 +110,7 @@ public class GOGUIImpl extends Application {
             public void handle(long currentNanoTime) {
                 double t = (currentNanoTime - startNanoTime) / 50000000.0;
 
-                int x = ((int) (t % currentBoardWidth));
+                int x = (int) (t % currentBoardWidth);
 
                 if (x < lastX) {
                     roundCount++;
@@ -123,15 +121,13 @@ public class GOGUIImpl extends Application {
                         stop();
                         clearBoard();
                         initializationLatch.countDown();
-                    }
-                    else {
+                    } else {
                         clearBoard();
                         if (x % 2 != 0) {
                             drawDiagonalStoneLine(x - 1, false, roundCount != 0);
                             drawDiagonalStoneLine(x, true, roundCount != 0);
                             drawDiagonalStoneLine(x + 1, false, roundCount != 0);
-                        }
-                        else {
+                        } else {
                             drawDiagonalStoneLine(x - 1, true, roundCount != 0);
                             drawDiagonalStoneLine(x, false, roundCount != 0);
                             drawDiagonalStoneLine(x + 1, true, roundCount != 0);
@@ -153,8 +149,8 @@ public class GOGUIImpl extends Application {
         primaryStage.setScene(scene);
         primaryStage.show();
 
-        //ImagePattern pattern = new ImagePattern(new Image("./background_1920.jpg"));
-        //scene.setFill(pattern);
+        ImagePattern pattern = new ImagePattern(new Image("./background_1920.jpg"));
+        scene.setFill(pattern);
 
         initBoardLines();
     }
@@ -187,15 +183,13 @@ public class GOGUIImpl extends Application {
                     if (x + y == diagonal * 2) {
                         if (!flip) {
                             addStone(x, y, stoneType);
-                        }
-                        else {
+                        } else {
                             addStone(currentBoardWidth - 1 - x, y, stoneType);
                         }
                     }
                 }
             }
-        }
-        catch (InvalidCoordinateException e) {
+        } catch (InvalidCoordinateException e) {
             throw new IllegalStateException(e);
         }
     }
@@ -204,29 +198,27 @@ public class GOGUIImpl extends Application {
         checkCoordinates(x, y);
         removeStone(x, y);
 
-        if (mode3D){
+        if (mode3D) {
             Sphere newStone = new Sphere(currentSquareSize / 2);
 
             if (white) {
                 newStone.setMaterial(whiteMaterial);
-            }
-            else {
+            } else {
                 newStone.setMaterial(blackMaterial);
             }
 
-            newStone.setTranslateX(((x + 1) * currentSquareSize));
-            newStone.setTranslateY(((y + 1) * currentSquareSize));
+            newStone.setTranslateX((x + 1) * currentSquareSize);
+            newStone.setTranslateY((y + 1) * currentSquareSize);
             board[x][y] = newStone;
 
             root.getChildren().add(newStone);
-        }
-        else {
-            Circle newStone = new Circle(((x + 1) * currentSquareSize), ((y + 1) * currentSquareSize), currentSquareSize / 2);
+        } else {
+            Circle newStone = new Circle((x + 1) * currentSquareSize, 
+            		(y + 1) * currentSquareSize, currentSquareSize / 2);
 
             if (white) {
                 newStone.setFill(Color.WHITE);
-            }
-            else {
+            } else {
                 newStone.setFill(Color.BLACK);
             }
 
@@ -246,11 +238,13 @@ public class GOGUIImpl extends Application {
 
     private void checkCoordinates(int x, int y) throws InvalidCoordinateException {
         if (x < 0 || x >= currentBoardWidth) {
-            throw new InvalidCoordinateException("x coordinate is outside of board range. x coordinate: " + x + " board range: 0-" + (currentBoardWidth - 1));
+            throw new InvalidCoordinateException("x coordinate is outside of board range. "
+            		+ "x coordinate: " + x + " board range: 0-" + (currentBoardWidth - 1));
         }
 
         if (y < 0 || y >= currentBoardHeight) {
-            throw new InvalidCoordinateException("y coordinate is outside of board range. y coordinate: " + y + " board range: 0-" + (currentBoardHeight - 1));
+            throw new InvalidCoordinateException("y coordinate is outside of board range."
+            		+ " y coordinate: " + y + " board range: 0-" + (currentBoardHeight - 1));
         }
     }
 
@@ -261,8 +255,7 @@ public class GOGUIImpl extends Application {
                     removeStone(x, y);
                 }
             }
-        }
-        catch (InvalidCoordinateException e) {
+        } catch (InvalidCoordinateException e) {
             throw new IllegalStateException(e);
         }
     }
@@ -293,8 +286,7 @@ public class GOGUIImpl extends Application {
             if (!initializationLatch.await(30, TimeUnit.SECONDS)) {
                 System.out.println("Initialization of the GOGUI failed!");
             }
-        }
-        catch (InterruptedException e) {
+        } catch (InterruptedException e) {
             e.printStackTrace();
         }
     }

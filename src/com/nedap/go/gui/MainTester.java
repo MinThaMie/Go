@@ -1,7 +1,7 @@
 package com.nedap.go.gui;
 
 /**
- * Example on how to use the GOGUI
+ * Example on how to use the GOGUI.
  *
  * @author Daan van Beek
  */
