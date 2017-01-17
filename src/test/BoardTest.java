@@ -55,21 +55,21 @@ public class BoardTest {
     }
     @Test
     public void testLibertiesCorner() {
-    	assertTrue(boardFive.hasLiberties(0, 0, Stone.WHITE));
+    	assertTrue(Stone.WHITE.hasLiberties(0, 0, boardFive));
     	boardFive.setField(0, 1, Stone.BLACK);
-    	assertTrue(boardFive.hasLiberties(0, 0, Stone.WHITE));
+    	assertTrue(Stone.WHITE.hasLiberties(0, 0, boardFive));
     	boardFive.setField(1, 0, Stone.BLACK);
-    	assertFalse(boardFive.hasLiberties(0, 0, Stone.WHITE));
+    	assertFalse(Stone.WHITE.hasLiberties(0, 0, boardFive));
     }
     
     @Test
     public void testLibertiesEdge() {
-    	assertTrue(boardFive.hasLiberties(1, 0, Stone.WHITE));
+    	assertTrue(Stone.WHITE.hasLiberties(1, 0, boardFive));
     	boardFive.setField(0, 0, Stone.BLACK);
-    	assertTrue(boardFive.hasLiberties(1, 0, Stone.WHITE));
+    	assertTrue(Stone.WHITE.hasLiberties(1, 0,  boardFive));
     	boardFive.setField(2, 0, Stone.BLACK);
     	boardFive.setField(1, 1, Stone.BLACK);
-    	assertFalse(boardFive.hasLiberties(1, 0, Stone.WHITE));
+    	assertFalse(Stone.WHITE.hasLiberties(1, 0,  boardFive));
     }
     
     @Test
@@ -78,25 +78,25 @@ public class BoardTest {
     	boardNine.setField(1, 1, Stone.BLACK);
     	boardNine.setField(2, 2, Stone.BLACK);
     	boardNine.setField(1, 2, Stone.WHITE);
-    	assertTrue(boardNine.hasLiberties(1, 2, Stone.WHITE));
+    	assertTrue(Stone.WHITE.hasLiberties(1, 2, boardNine));
     	boardNine.setField(1, 3, Stone.WHITE);
-    	assertTrue(boardNine.hasLiberties(1, 2, Stone.WHITE)); 
+    	assertTrue(Stone.WHITE.hasLiberties(1, 2, boardNine)); 
     }
 
     @Test
     public void testGetLiberties() {
     	boardNine.setField(0, 2, Stone.BLACK);
     	boardNine.setField(1, 1, Stone.BLACK);
-    	assertEquals(4, boardNine.getLiberties(1, 1, Stone.BLACK).size());
+    	assertEquals(4, Stone.BLACK.getLiberties(1, 1, boardNine).size());
     	boardNine.setField(2, 2, Stone.BLACK);    	
     	boardNine.setField(1, 2, Stone.WHITE);
-    	assertEquals(1, boardNine.getLiberties(1, 2, Stone.WHITE).size());
+    	assertEquals(1, Stone.WHITE.getLiberties(1, 2, boardNine).size());
     	boardNine.setField(1, 3, Stone.WHITE);
-    	assertEquals(3, boardNine.getLiberties(1, 2, Stone.WHITE).size());
-    	assertEquals(3, boardNine.getLiberties(1, 3, Stone.WHITE).size());
+    	assertEquals(3, Stone.WHITE.getLiberties(1, 2, boardNine).size());
+    	assertEquals(3, Stone.WHITE.getLiberties(1, 3, boardNine).size());
     	boardNine.setField(1, 4, Stone.WHITE);
     	boardNine.setField(2, 4, Stone.WHITE);
-    	assertEquals(6, boardNine.getLiberties(1, 2, Stone.WHITE).size());
+    	assertEquals(6, Stone.WHITE.getLiberties(1, 2,  boardNine).size());
 
 
     }
