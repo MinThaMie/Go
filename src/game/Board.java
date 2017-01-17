@@ -17,21 +17,21 @@ public class Board {
 	 * @param i: index of the queried field
 	 * @return boolean true if the field is on the board
 	 */
-	boolean isField(int i) {
+	public boolean isField(int i) {
 		return i >= 0 && i < fields.length;
 	}
 	//TODO: Find out what common practice is with these kind of functions
 	// overloading a function or using the index function
-	private boolean isField(int x, int y) {
+	public boolean isField(int x, int y) {
 		int index = index(x, y);
-		return index > 0 && index < fields.length;
+		return index >= 0 && index < fields.length;
 	}
 	/**
 	 * This function checks whether a field is empty or not.
 	 * @param i: index of the queried field
 	 * @return boolean true if the field is empty
 	 */
-	boolean isEmpty(int i) {
+	public boolean isEmpty(int i) {
 		if (isField(i)) {
 			return fields[i] == Stone.EMPTY;
 		} else {
@@ -39,19 +39,27 @@ public class Board {
 		}
 	}
 	
-	private int index(int x, int y) {
+	int index(int x, int y) {
 		return x * dim + y;
 	}
 	
-	int[] coordinate(int i) {
+	public int[] coordinate(int i) {
 		int y = i / dim;
 		int x = i % dim;
 		int[] coordinate = {x, y};
 		return coordinate;
 	}
 	
-	int getBoardSize() {
+	public int getBoardSize() {
 		return this.dim;
+	}
+	
+	public Stone getField(int i) {
+		return fields[i];
+	}
+	
+	public Stone getField(int x, int y) {
+		return fields[index(x, y)];
 	}
 	
 	//Setters TODO: correct name?
@@ -61,7 +69,7 @@ public class Board {
 	 * @param i: index of the field
 	 * @param s: the stone placed
 	 */
-	void setField(int i, Stone s) {
+	public void setField(int i, Stone s) {
 		if (isField(i)) {
 			fields[i] = s;
 		}
@@ -73,7 +81,7 @@ public class Board {
 	 * @param y: y-coordinate
 	 * @param s: the stone placed
 	 */
-	void setField(int x, int y, Stone s) {
+	public void setField(int x, int y, Stone s) {
 		int index = index(x, y);
 		if (isField(index)) {
 			fields[index] = s;
