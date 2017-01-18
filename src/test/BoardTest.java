@@ -53,6 +53,15 @@ public class BoardTest {
         boardFive.setField(0, 0, Stone.BLACK);
         assertEquals(Stone.BLACK, boardFive.getField(0, 0));
     }
+    
+    @Test
+    public void testNeighbours() {
+    	boardFive.setField(0, 0, Stone.BLACK);
+    	assertEquals(2, boardFive.getNeighbours(0,0).size());
+    	boardFive.setField(3, 2, Stone.BLACK);
+    	assertEquals(4, boardFive.getNeighbours(1, 1).size());
+    }
+   
     @Test
     public void testLibertiesCorner() {
     	assertTrue(boardFive.hasLiberties(0, 0, Stone.WHITE));
@@ -71,7 +80,7 @@ public class BoardTest {
     	boardFive.setField(1, 1, Stone.BLACK);
     	assertFalse(boardFive.hasLiberties(1, 0, Stone.WHITE));
     }
-    
+   
     @Test
     public void testLiberties() {
     	boardNine.setField(0, 2, Stone.BLACK);
@@ -97,7 +106,5 @@ public class BoardTest {
     	boardNine.setField(1, 4, Stone.WHITE);
     	boardNine.setField(2, 4, Stone.WHITE);
     	assertEquals(6, boardNine.getLiberties(1, 2, Stone.WHITE).size());
-
-
     }
 }

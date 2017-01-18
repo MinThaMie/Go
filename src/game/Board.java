@@ -61,31 +61,39 @@ public class Board {
 	 */
 	public Set<Integer> getLiberties(int x, int y, Stone s) {
 		Set<Integer> libertyList = new HashSet<>();
-		for (int i = x - 1; i <= x + 1; i++) {
-			if (i >= 0 && i != x && i < dim) { //ignore the stone and respect the edges
-				if (isEmpty(i, y)) {
-					libertyList.add(index(i, y));
-
-				} else if (getField(i, y) == s) {
-					Set<Integer> chains = getChainLiberties(i, y, s, x, y);
-					libertyList.addAll(chains);
-				}
+		Set<Integer> chain = new HashSet<>();
+		int pos = index(x, y);
+		Set<Integer> neighbours = getNeighbours(x, y);
+		for (int i : neighbours) {
+			if (getField(i) == Stone.EMPTY) {
+				chain.add(pos);
+				libertyList.add(i);
+			} else if (!chain.contains(i) && getField(i) == s) {
+				int[] coor = coordinate(i);
+				chain.add(pos);
+				libertyList.addAll(getChainLiberties(coor[0], coor[1], s, libertyList, chain));
 			}
-		}
-		for (int j = y - 1; j <= y + 1; j++) {
-			if (j >= 0 && j != y && j < dim) { //ignore the stone and respect the edges
-				if (isEmpty(x, j)) {
-					libertyList.add(index(x, j));
-
-				} else if (getField(x, j) == s) {
-					Set<Integer> chains = getChainLiberties(x, j, s, x, y);
-					libertyList.addAll(chains);
-				}
-
-			}
-
 		}
 		return libertyList;
+	}
+
+	public Set<Integer> getChainLiberties(int x, int y, Stone s, Set<Integer> liberty, Set<Integer> chain) {
+		Set<Integer> chains = chain;
+		Set<Integer> liberties = liberty;
+		int pos = index(x, y);
+		Set<Integer> neighbours = getNeighbours(x, y);
+		System.out.println("neighbours " + neighbours.toString());
+		for (int i : neighbours) {
+			if (getField(i) == Stone.EMPTY) {
+				chains.add(pos);
+				liberties.add(i);
+			} else if (!chains.contains(i) && getField(i) == s) {
+				int[] coor = coordinate(i);
+				chains.add(pos);
+				liberties.addAll(getChainLiberties(coor[0], coor[1], s, liberties, chains));
+			}
+		}
+		return liberties;
 	}
 	/**
 	 * This method works similar to the getLiberties method. 
@@ -94,7 +102,7 @@ public class Board {
 	 * @param prevX
 	 * @param prevY
 	 */
-	private Set<Integer> getChainLiberties(int x, int y, Stone s, int prevX, int prevY) {
+	/*private Set<Integer> getChainLiberties(int x, int y, Stone s, int prevX, int prevY) {
 		Set<Integer> chainLibertyList = new HashSet<>();
 		for (int i = x - 1; i <= x + 1; i++) {
 			if (i >= 0 && i != x && i != prevX) {
@@ -117,7 +125,7 @@ public class Board {
 
 		}
 		return chainLibertyList;
-	}
+	}*/
 		
 	int index(int x, int y) {
 		return x + y * dim;
@@ -165,6 +173,38 @@ public class Board {
 		int index = index(x, y);
 		if (isField(index)) {
 			fields[index] = s;
+			System.out.println("liberties " + getLiberties(x,y,s).toString());
+
 		}
+	}
+	
+	public Set<Integer> getNeighbours(int x, int y) {
+		Set<Integer> neighbours = new HashSet<>();
+		if (getTopNeighbour(x, y) >= 0) {
+			neighbours.add(getTopNeighbour(x, y));
+		}
+		if (getBottomNeighbour(x, y) >= 0) {
+			neighbours.add(getBottomNeighbour(x, y));
+		}
+		if (getLeftNeighbour(x, y) >= 0) {
+			neighbours.add(getLeftNeighbour(x, y));
+		}
+		if (getRightNeighbour(x, y) >= 0) {
+			neighbours.add(getRightNeighbour(x, y));
+		}
+		return neighbours;
+	}
+	
+	public int getTopNeighbour(int x, int y) {
+		return (y - 1 >= 0) ? index(x, y - 1) : -1;
+	}
+	public int getBottomNeighbour(int x, int y) {
+		return (y + 1 < dim) ? index(x, y + 1) : -1;
+	}
+	public int getLeftNeighbour(int x, int y) {
+		return (x - 1 >= 0) ? index(x - 1, y) : -1;
+	}
+	public int getRightNeighbour(int x, int y) {
+		return  (x + 1 < dim) ? index(x + 1, y) : -1;
 	}
 }
