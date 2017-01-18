@@ -120,7 +120,7 @@ public class Board {
 	}
 		
 	int index(int x, int y) {
-		return x * dim + y;
+		return x + y * dim;
 	}
 	
 	public int[] coordinate(int i) {
