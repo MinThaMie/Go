@@ -153,6 +153,7 @@ public class GOGUIImpl extends Application {
         scene.setFill(pattern);
 
         initBoardLines();
+        refresh();
     }
 
     private void initBoardLines() {
@@ -174,6 +175,10 @@ public class GOGUIImpl extends Application {
         }
 
         root.getChildren().addAll(boardLines);
+    }
+    
+    private void refresh() {
+    	root.requestLayout();
     }
 
     private void drawDiagonalStoneLine(int diagonal, Boolean stoneType, boolean flip) {
@@ -225,6 +230,7 @@ public class GOGUIImpl extends Application {
             board[x][y] = newStone;
             root.getChildren().add(newStone);
         }
+        refresh();
     }
 
     protected void removeStone(int x, int y) throws InvalidCoordinateException {
@@ -234,6 +240,7 @@ public class GOGUIImpl extends Application {
             root.getChildren().remove(board[x][y]);
         }
         board[x][y] = null;
+        refresh();
     }
 
     private void checkCoordinates(int x, int y) throws InvalidCoordinateException {
