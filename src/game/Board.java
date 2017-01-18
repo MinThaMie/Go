@@ -1,5 +1,9 @@
 package game;
 
+import com.nedap.go.gui.GoGUIIntegrator;
+
+import game.Stone.StoneColor;
+
 public class Board {
 	
 	private final int dim;
@@ -8,7 +12,7 @@ public class Board {
 		this.dim = dim;
     	fields = new Stone[dim * dim];
 		for (int i = 0; i < dim * dim; i++) {
-			setField(i, Stone.EMPTY);
+			setField(i, new Stone(StoneColor.EMPTY));
 		}
 	}
 	//Getters TODO: correct name?
@@ -23,8 +27,7 @@ public class Board {
 	//TODO: Find out what common practice is with these kind of functions
 	// overloading a function or using the index function
 	public boolean isField(int x, int y) {
-		int index = index(x, y);
-		return index >= 0 && index < fields.length;
+		return  isField(index(x, y));
 	}
 	/**
 	 * This function checks whether a field is empty or not.
@@ -32,7 +35,7 @@ public class Board {
 	 * @return boolean true if the field is empty
 	 */
 	public boolean isEmpty(int i) {
-		return isField(i) && fields[i] == Stone.EMPTY;
+		return isField(i) && getField(i).getColor() == StoneColor.EMPTY;
 	}
 	
 	public boolean isEmpty(int x, int y) {
@@ -41,7 +44,7 @@ public class Board {
 	}
 		
 	int index(int x, int y) {
-		return x * dim + y;
+		return x + y * dim;
 	}
 	
 	public int[] coordinate(int i) {
@@ -60,7 +63,8 @@ public class Board {
 	}
 	
 	public Stone getField(int x, int y) {
-		return fields[index(x, y)];
+		int i = index(x, y);
+		return isField(i) ? fields[i] : null;
 	}
 	
 	//Setters TODO: correct name?
@@ -70,9 +74,22 @@ public class Board {
 	 * @param i: index of the field
 	 * @param s: the stone placed
 	 */
+	
 	public void setField(int i, Stone s) {
 		if (isField(i)) {
 			fields[i] = s;
+		}
+	}
+	public void setField(int i, Stone s, GoGUIIntegrator gogui) {
+		if (isField(i) && isEmpty(i)) {
+			fields[i] = s;
+			if (s.getColor() != StoneColor.EMPTY) {
+				int[] coor = coordinate(i);
+				s.setLiberties(coor[0], coor[1], this);
+				s.checkNeighbours(coor[0], coor[1], this, gogui);
+			}
+		} else {
+			System.out.println("Not a valid field");
 		}
 	}
 	/**
@@ -82,10 +99,14 @@ public class Board {
 	 * @param y: y-coordinate
 	 * @param s: the stone placed
 	 */
-	public void setField(int x, int y, Stone s) {
+	public void setField(int x, int y, Stone s, GoGUIIntegrator gogui) {
 		int index = index(x, y);
-		if (isField(index)) {
+		if (isField(index) && isEmpty(index)) {
 			fields[index] = s;
+			if (s.getColor() != StoneColor.EMPTY) {
+				s.setLiberties(x, y, this);
+				s.checkNeighbours(x, y, this, gogui);
+			}
 		}
 	}
 }

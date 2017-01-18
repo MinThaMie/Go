@@ -25,6 +25,8 @@ public class RandomStrategy implements Strategy {
 		while (emptyFields.size() > 0) {
 			double random = Math.random();
 			int index = (int) (random * size);
+			int[] coor = b.coordinate(index);
+			System.out.println("coor " + coor[0] + " " + coor[1]);
 			return emptyFields.get(index);
 		} 
 		return -1;
