@@ -62,7 +62,7 @@ public class Board {
 	public Set<Integer> getLiberties(int x, int y, Stone s) {
 		Set<Integer> libertyList = new HashSet<>();
 		for (int i = x - 1; i <= x + 1; i++) {
-			if (i >= 0 && i != x) { //ignore the stone and respect the edges
+			if (i >= 0 && i != x && i < dim) { //ignore the stone and respect the edges
 				if (isEmpty(i, y)) {
 					libertyList.add(index(i, y));
 
@@ -73,7 +73,7 @@ public class Board {
 			}
 		}
 		for (int j = y - 1; j <= y + 1; j++) {
-			if (j >= 0 && j != y) { //ignore the stone and respect the edges
+			if (j >= 0 && j != y && j < dim) { //ignore the stone and respect the edges
 				if (isEmpty(x, j)) {
 					libertyList.add(index(x, j));
 
