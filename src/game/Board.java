@@ -82,7 +82,6 @@ public class Board {
 		Set<Integer> liberties = liberty;
 		int pos = index(x, y);
 		Set<Integer> neighbours = getNeighbours(x, y);
-		System.out.println("neighbours " + neighbours.toString());
 		for (int i : neighbours) {
 			if (getField(i) == Stone.EMPTY) {
 				chains.add(pos);
@@ -95,37 +94,6 @@ public class Board {
 		}
 		return liberties;
 	}
-	/**
-	 * This method works similar to the getLiberties method. 
-	 * It does not check the previous stone for liberties. 
-	 * This works recursively in case that the chain is longer than just one stone.
-	 * @param prevX
-	 * @param prevY
-	 */
-	/*private Set<Integer> getChainLiberties(int x, int y, Stone s, int prevX, int prevY) {
-		Set<Integer> chainLibertyList = new HashSet<>();
-		for (int i = x - 1; i <= x + 1; i++) {
-			if (i >= 0 && i != x && i != prevX) {
-				if (isEmpty(i, y)) {
-					chainLibertyList.add(index(i, y));
-				} else if (getField(i, y) == s) {
-					chainLibertyList.addAll(getChainLiberties(i, y, s, x, y));
-				}
-			}
-		}
-		for (int j = y - 1; j <= y + 1; j++) {
-			if (j >= 0 && j != y && j != prevY) {
-				if (isEmpty(x, j)) {
-					chainLibertyList.add(index(x, j));
-				} else if (getField(x, j) == s) {
-					chainLibertyList.addAll(getChainLiberties(x, j, s, x, y));
-				}
-
-			}
-
-		}
-		return chainLibertyList;
-	}*/
 		
 	int index(int x, int y) {
 		return x + y * dim;
@@ -173,8 +141,6 @@ public class Board {
 		int index = index(x, y);
 		if (isField(index)) {
 			fields[index] = s;
-			System.out.println("liberties " + getLiberties(x,y,s).toString());
-
 		}
 	}
 	
