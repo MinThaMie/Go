@@ -170,7 +170,7 @@ public class Board {
 	}
 	
 	public boolean isAllowed(int x, int y, Stone s) {
-		return isField(x, y) && !getLiberties(x, y, s, new HashSet<>(), new HashSet<>()).isEmpty();
+		return isEmpty(x, y) && !getLiberties(x, y, s, new HashSet<>(), new HashSet<>()).isEmpty();
 	}
 // Neighbours	
 	public Set<Integer> getNeighbours(int x, int y) {

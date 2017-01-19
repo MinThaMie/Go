@@ -13,7 +13,7 @@ public class Game {
 		GoGUIIntegrator gogui = new GoGUIIntegrator(true, true, boardsize);
 		Board b = new Board(boardsize, gogui);
         gogui.startGUI();
-		for (int i = 0; i < 50; i++) {
+		for (int i = 0; i < 27; i++) {
 			Stone stone;
 			if (i % 2 == 0) {
 				stone = Stone.BLACK;
@@ -27,7 +27,7 @@ public class Game {
 			int[] coor = b.coordinate(move);
 			gogui.addStone(coor[0], coor[1], white);
 			try {
-				Thread.sleep(300);
+				Thread.sleep(600);
 			} catch (InterruptedException e)  {
 				System.out.println("Yo, i've been interupted");
 			}
