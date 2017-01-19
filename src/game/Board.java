@@ -1,12 +1,15 @@
 package game;
 import java.util.*;
+import com.nedap.go.gui.GoGUIIntegrator;
 
 public class Board {
 	
 	private final int dim;
 	private final Stone[] fields;
-	public Board(int dim) {
+	GoGUIIntegrator gui;
+	public Board(int dim, GoGUIIntegrator gogui) {
 		this.dim = dim;
+		this.gui = gogui;
     	fields = new Stone[dim * dim];
 		for (int i = 0; i < dim * dim; i++) {
 			setField(i, Stone.EMPTY);
@@ -126,9 +129,8 @@ public class Board {
 	 * @param s: the stone placed
 	 */
 	public void setField(int i, Stone s) {
-		if (isField(i)) {
-			fields[i] = s;
-		}
+		int[] coor = coordinate(i);
+		setField(coor[0], coor[1], s);
 	}
 	/**
 	 * This function overloads the function above does the same.
@@ -142,6 +144,20 @@ public class Board {
 		if (isField(index)) {
 			fields[index] = s;
 		}
+		Set<Integer> neighbours = getNeighbours(x, y);
+		for (int i : neighbours) {
+			int[] coor = coordinate(i);
+			if (getLiberties(coor[0], coor[1], getField(i)).size() == 0) {
+				System.out.println("Should remove " + coor[0] + " " + coor[1]);
+				remove(coor[0], coor[1]);
+			}
+		}
+	}
+	
+	public void remove(int x, int y) {
+		gui.removeStone(x, y);
+		int index = index(x, y);
+		fields[index] = Stone.EMPTY;
 	}
 	
 	public Set<Integer> getNeighbours(int x, int y) {

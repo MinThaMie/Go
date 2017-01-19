@@ -8,8 +8,9 @@ public class Game {
 		
         boolean white;
 		Strategy random = new RandomStrategy();
-		Board b = new Board(5);
-		GoGUIIntegrator gogui = new GoGUIIntegrator(true, true, b.getBoardSize());
+		int boardsize = 5;
+		GoGUIIntegrator gogui = new GoGUIIntegrator(true, true, boardsize);
+		Board b = new Board(boardsize, gogui);
         gogui.startGUI();
 		for (int i = 0; i < 25; i++) {
 			Stone stone;
