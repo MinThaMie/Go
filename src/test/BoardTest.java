@@ -1,6 +1,9 @@
 package test;
 
 import static org.junit.Assert.*;
+
+import java.util.HashSet;
+
 import game.Board;
 import game.Stone;
 
@@ -96,16 +99,16 @@ public class BoardTest {
     public void testGetLiberties() {
     	boardNine.setField(0, 2, Stone.BLACK);
     	boardNine.setField(1, 1, Stone.BLACK);
-    	assertEquals(4, boardNine.getLiberties(1, 1, Stone.BLACK).size());
+    	assertEquals(4, boardNine.getLiberties(1, 1, Stone.BLACK, new HashSet<>(), new HashSet<>()).size());
     	boardNine.setField(2, 2, Stone.BLACK);    	
     	boardNine.setField(1, 2, Stone.WHITE);
-    	assertEquals(1, boardNine.getLiberties(1, 2, Stone.WHITE).size());
+    	assertEquals(1, boardNine.getLiberties(1, 2, Stone.WHITE, new HashSet<>(), new HashSet<>()).size());
     	boardNine.setField(1, 3, Stone.WHITE);
-    	assertEquals(3, boardNine.getLiberties(1, 2, Stone.WHITE).size());
-    	assertEquals(3, boardNine.getLiberties(1, 3, Stone.WHITE).size());
+    	assertEquals(3, boardNine.getLiberties(1, 2, Stone.WHITE, new HashSet<>(), new HashSet<>()).size());
+    	assertEquals(3, boardNine.getLiberties(1, 3, Stone.WHITE, new HashSet<>(), new HashSet<>()).size());
     	boardNine.setField(1, 4, Stone.WHITE);
     	boardNine.setField(2, 4, Stone.WHITE);
-    	assertEquals(6, boardNine.getLiberties(1, 2, Stone.WHITE).size());
+    	assertEquals(6, boardNine.getLiberties(1, 2, Stone.WHITE, new HashSet<>(), new HashSet<>()).size());
     }
     
     @Test
@@ -114,7 +117,7 @@ public class BoardTest {
     	boardNine.setField(2, 2, Stone.BLACK);
     	boardNine.setField(1, 3, Stone.BLACK);
     	boardNine.setField(2, 3, Stone.BLACK);
-    	assertEquals(8, boardNine.getLiberties(1, 2, Stone.BLACK).size());
+    	assertEquals(8, boardNine.getLiberties(1, 2, Stone.BLACK, new HashSet<>(), new HashSet<>()).size());
     }
     
     @Test
@@ -123,9 +126,9 @@ public class BoardTest {
     	boardNine.setField(1, 2, Stone.BLACK);
     	boardNine.setField(3, 2, Stone.BLACK);
     	boardNine.setField(3, 3, Stone.BLACK);
-    	assertEquals(6, boardNine.getLiberties(1, 2, Stone.BLACK).size());
+    	assertEquals(6, boardNine.getLiberties(1, 2, Stone.BLACK, new HashSet<>(), new HashSet<>()).size());
     	boardNine.setField(2, 2, Stone.BLACK);
-    	assertEquals(10, boardNine.getLiberties(1, 2, Stone.BLACK).size());
+    	assertEquals(10, boardNine.getLiberties(1, 2, Stone.BLACK, new HashSet<>(), new HashSet<>()).size());
     }
     @Test
     public void testRemove() {

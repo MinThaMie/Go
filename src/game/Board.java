@@ -147,25 +147,25 @@ public class Board {
 		} else if (isAllowed(x, y, s)) {
 			fields[index] = s;
 			getChain(x, y, s, new HashSet<>());
-		}
-		Set<Integer> neighbours = getNeighbours(x, y);
-		for (int i : neighbours) {
-			int[] coor = coordinate(i);
-			if (getField(i) != Stone.EMPTY) {
-				if (getLiberties(coor[0], coor[1], getField(i), new HashSet<>(), new HashSet<>()).isEmpty()) {
-					System.out.println("Should remove " + coor[0] + " " + coor[1]);
-					remove(coor[0], coor[1], getField(i));
+			Set<Integer> neighbours = getNeighbours(x, y);
+			for (int i : neighbours) {
+				int[] coor = coordinate(i);
+				if (getField(i) != Stone.EMPTY) {
+					if (getLiberties(coor[0], coor[1], getField(i), new HashSet<>(), new HashSet<>()).isEmpty()) {
+						System.out.println("Should remove " + coor[0] + " " + coor[1]);
+						remove(coor[0], coor[1], getField(i));
+					}
 				}
 			}
 		}
 	}
 	
 	public void remove(int x, int y, Stone s) {
-		Set<Integer> toBeRemoved = getChain(x,y,s, new HashSet<>());
-		for (int i : toBeRemoved ) {
+		Set<Integer> toBeRemoved = getChain(x, y, s, new HashSet<>());
+		for (int i : toBeRemoved) {
 			fields[i] = Stone.EMPTY;
 			int[] coor = coordinate(i);
-			gui.removeStone(coor[0], coor[1]);
+			gui.removeStone(coor[0], coor[1]); //disable during test
 		}
 	}
 	
