@@ -107,4 +107,24 @@ public class BoardTest {
     	boardNine.setField(2, 4, Stone.WHITE);
     	assertEquals(6, boardNine.getLiberties(1, 2, Stone.WHITE).size());
     }
+    
+    @Test
+    public void testSquare() {
+    	boardNine.setField(1, 2, Stone.BLACK);
+    	boardNine.setField(2, 2, Stone.BLACK);
+    	boardNine.setField(1, 3, Stone.BLACK);
+    	boardNine.setField(2, 3, Stone.BLACK);
+    	assertEquals(8, boardNine.getLiberties(1, 2, Stone.BLACK).size());
+    }
+    
+    @Test
+    public void testChains() {
+    	boardNine.setField(1, 1, Stone.BLACK);
+    	boardNine.setField(1, 2, Stone.BLACK);
+    	boardNine.setField(3, 2, Stone.BLACK);
+    	boardNine.setField(3, 3, Stone.BLACK);
+    	assertEquals(6, boardNine.getLiberties(1, 2, Stone.BLACK).size());
+    	boardNine.setField(2, 2, Stone.BLACK);
+    	assertEquals(10, boardNine.getLiberties(1, 2, Stone.BLACK).size());
+    }
 }
