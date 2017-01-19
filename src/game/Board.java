@@ -10,9 +10,7 @@ public class Board {
 	public Board(int dim) {
 		this.dim = dim;
     	fields = new Stone[dim * dim];
-		for (int i = 0; i < dim * dim; i++) {
-			setField(i, Stone.EMPTY);
-		}
+    	setBoard();
 	}
 	
 	public Board(int dim, GoGUIIntegrator gogui) {
@@ -129,6 +127,12 @@ public class Board {
 	 * @param i: index of the field
 	 * @param s: the stone placed
 	 */
+	
+	public void setBoard() {
+		for (int i = 0; i < dim * dim; i++) {
+			fields[i] = Stone.EMPTY;
+		}
+	}
 	public void setField(int i, Stone s) {
 		int[] coor = coordinate(i);
 		setField(coor[0], coor[1], s);
@@ -142,9 +146,9 @@ public class Board {
 	 */
 	public void setField(int x, int y, Stone s) {
 		int index = index(x, y);
-		if (s == Stone.EMPTY) { // For the setup
-			fields[index] = s;
-		} else if (isAllowed(x, y, s)) {
+		if (isAllowed(x, y, s)) {
+			boolean white = s == Stone.WHITE;
+			gui.addStone(x, y, white);
 			fields[index] = s;
 			getChain(x, y, s, new HashSet<>());
 			Set<Integer> neighbours = getNeighbours(x, y);

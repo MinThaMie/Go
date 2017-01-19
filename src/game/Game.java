@@ -23,11 +23,9 @@ public class Game {
 				white = true;
 			}
 			int move = random.determineMove(b, stone);
-			b.setField(move, stone);
-			int[] coor = b.coordinate(move);
-			gogui.addStone(coor[0], coor[1], white);
+			b.setField(move, stone); 
 			try {
-				Thread.sleep(600);
+				Thread.sleep(1000);
 			} catch (InterruptedException e)  {
 				System.out.println("Yo, i've been interupted");
 			}
