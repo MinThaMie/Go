@@ -57,7 +57,7 @@ public class BoardTest {
     @Test
     public void testNeighbours() {
     	boardFive.setField(0, 0, Stone.BLACK);
-    	assertEquals(2, boardFive.getNeighbours(0,0).size());
+    	assertEquals(2, boardFive.getNeighbours(0, 0).size());
     	boardFive.setField(3, 2, Stone.BLACK);
     	assertEquals(4, boardFive.getNeighbours(1, 1).size());
     }
@@ -126,5 +126,14 @@ public class BoardTest {
     	assertEquals(6, boardNine.getLiberties(1, 2, Stone.BLACK).size());
     	boardNine.setField(2, 2, Stone.BLACK);
     	assertEquals(10, boardNine.getLiberties(1, 2, Stone.BLACK).size());
+    }
+    @Test
+    public void testRemove() {
+    	boardFive.setField(0, 0, Stone.BLACK);
+    	boardFive.setField(0, 1, Stone.WHITE);
+    	assertEquals(Stone.BLACK, boardFive.getField(0, 0));
+    	boardFive.setField(1, 0, Stone.WHITE);
+    	assertEquals(Stone.EMPTY, boardFive.getField(0, 0));
+
     }
 }
