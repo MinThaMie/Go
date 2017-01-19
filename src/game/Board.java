@@ -79,7 +79,7 @@ public class Board {
 	 * If the stone chains with another stone it calls the method getChainLiberties.
 	 * @return a set with the indices that are the liberties of a certain stone
 	 */
-	public Set<Integer> getLiberties(int x, int y, Stone s, Set<Integer> liberties, Set<Integer> chain ) {
+	public Set<Integer> getLiberties(int x, int y, Stone s, Set<Integer> liberties, Set<Integer> chain) {
 		liberties.addAll(liberties);
 		chain.addAll(chain);
 		int pos = index(x, y);
