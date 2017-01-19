@@ -139,4 +139,15 @@ public class BoardTest {
     	assertEquals(Stone.EMPTY, boardFive.getField(0, 0));
 
     }
+    @Test
+    
+    public void testPlacement() {
+    	boardFive.setField(0, 1, Stone.WHITE);
+    	boardFive.setField(1, 0, Stone.WHITE);
+    	assertFalse(boardFive.isAllowed(0, 0, Stone.BLACK));
+    	assertTrue(boardFive.isAllowed(0, 0, Stone.WHITE));
+    	boardFive.setField(0, 0, Stone.BLACK);
+    	assertEquals(Stone.EMPTY, boardFive.getField(0, 0));
+    	assertFalse(boardFive.isAllowed(0, 1, Stone.BLACK));
+    }
 }
