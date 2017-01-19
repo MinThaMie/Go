@@ -13,7 +13,7 @@ public class Game {
 		GoGUIIntegrator gogui = new GoGUIIntegrator(true, true, boardsize);
 		Board b = new Board(boardsize, gogui);
         gogui.startGUI();
-		/*for (int i = 0; i < 3; i++) {
+		for (int i = 0; i < 50; i++) {
 			Stone stone;
 			if (i % 2 == 0) {
 				stone = Stone.BLACK;
@@ -31,8 +31,8 @@ public class Game {
 			} catch (InterruptedException e)  {
 				System.out.println("Yo, i've been interupted");
 			}
-		}*/
-        b.setField(1, 1, Stone.BLACK);
+		}
+        /*b.setField(1, 1, Stone.BLACK);
 		gogui.addStone(1, 1, false);
     	b.setField(1, 2, Stone.BLACK);
 		gogui.addStone(1, 2, false);
@@ -56,8 +56,8 @@ public class Game {
 		}
     	/*b.setField(2, 2, Stone.BLACK);
 		gogui.addStone(2, 2, false);
-    	b.getChain(2, 2, Stone.BLACK, new HashSet<>());
-    	b.setField(1, 0, Stone.WHITE);*/
+    	b.getChain(2, 2, Stone.BLACK, new HashSet<>());*/
+    	/*b.setField(1, 0, Stone.WHITE);
     	gogui.addStone(1, 0, true);
     	try {
 			Thread.sleep(500);
@@ -93,6 +93,6 @@ public class Game {
 			System.out.println("Yo, i've been interupted");
 		}
     	b.setField(1, 3, Stone.WHITE);
-    	gogui.addStone(1, 3, true);
+    	gogui.addStone(1, 3, true);*/
 	}
 }

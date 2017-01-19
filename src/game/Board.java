@@ -58,7 +58,7 @@ public class Board {
 	 * Returns whether an coordinate has liberties on the board.
 	 */
 	public boolean hasLiberties(int x, int y, Stone s) {
-		return getLiberties(x, y, s).size() > 0;
+		return getLiberties(x, y, s, new HashSet<>(), new HashSet<>()).size() > 0;
 	}
 	
 	public Set<Integer> getChain(int x, int y, Stone s, Set<Integer> set) {
@@ -81,38 +81,19 @@ public class Board {
 	 * If the stone chains with another stone it calls the method getChainLiberties.
 	 * @return a set with the indices that are the liberties of a certain stone
 	 */
-	public Set<Integer> getLiberties(int x, int y, Stone s) {
-		Set<Integer> libertyList = new HashSet<>();
-		Set<Integer> chain = new HashSet<>();
+	public Set<Integer> getLiberties(int x, int y, Stone s, Set<Integer> liberties, Set<Integer> chain ) {
+		liberties.addAll(liberties);
+		chain.addAll(chain);
 		int pos = index(x, y);
 		Set<Integer> neighbours = getNeighbours(x, y);
 		for (int i : neighbours) {
 			if (getField(i) == Stone.EMPTY) {
 				chain.add(pos);
-				libertyList.add(i);
+				liberties.add(i);
 			} else if (!chain.contains(i) && getField(i) == s) {
 				int[] coor = coordinate(i);
 				chain.add(pos);
-				libertyList.addAll(getChainLiberties(coor[0], coor[1], s, libertyList, chain));
-			}
-		}
-		//System.out.println("chain " + chain.toString() + "liberties " + libertyList);
-		return libertyList;
-	}
-
-	public Set<Integer> getChainLiberties(int x, int y, Stone s, Set<Integer> liberty, Set<Integer> chain) {
-		Set<Integer> chains = chain;
-		Set<Integer> liberties = liberty;
-		int pos = index(x, y);
-		Set<Integer> neighbours = getNeighbours(x, y);
-		for (int i : neighbours) {
-			if (getField(i) == Stone.EMPTY) {
-				chains.add(pos);
-				liberties.add(i);
-			} else if (!chains.contains(i) && getField(i) == s) {
-				int[] coor = coordinate(i);
-				chains.add(pos);
-				liberties.addAll(getChainLiberties(coor[0], coor[1], s, liberties, chains));
+				liberties.addAll(getLiberties(coor[0], coor[1], s, liberties, chain));
 			}
 		}
 		return liberties;
@@ -171,7 +152,7 @@ public class Board {
 		for (int i : neighbours) {
 			int[] coor = coordinate(i);
 			if (getField(i) != Stone.EMPTY) {
-				if (getLiberties(coor[0], coor[1], getField(i)).size() == 0) {
+				if (getLiberties(coor[0], coor[1], getField(i), new HashSet<>(), new HashSet<>()).isEmpty()) {
 					System.out.println("Should remove " + coor[0] + " " + coor[1]);
 					remove(coor[0], coor[1], getField(i));
 				}
@@ -180,14 +161,16 @@ public class Board {
 	}
 	
 	public void remove(int x, int y, Stone s) {
-		//gui.removeStone(x, y);
-		int index = index(x, y);
-		System.out.println("chain of removed stone " + getChain(x,y,s, new HashSet<>()) );
-		fields[index] = Stone.EMPTY;
+		Set<Integer> toBeRemoved = getChain(x,y,s, new HashSet<>());
+		for (int i : toBeRemoved ) {
+			fields[i] = Stone.EMPTY;
+			int[] coor = coordinate(i);
+			gui.removeStone(coor[0], coor[1]);
+		}
 	}
 	
 	public boolean isAllowed(int x, int y, Stone s) {
-		return isField(x, y) && getLiberties(x, y, s).size() > 0;
+		return isField(x, y) && !getLiberties(x, y, s, new HashSet<>(), new HashSet<>()).isEmpty();
 	}
 // Neighbours	
 	public Set<Integer> getNeighbours(int x, int y) {
