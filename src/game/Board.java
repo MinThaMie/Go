@@ -173,6 +173,11 @@ public class Board {
 		}
 	}
 	
+	public boolean isAllowed(int i, Stone s) {
+		int[] coor = coordinate(i);
+		return isAllowed(coor[0], coor[1], s);
+	}
+	
 	public boolean isAllowed(int x, int y, Stone s) {
 		return isEmpty(x, y) && !getLiberties(x, y, s, new HashSet<>(), new HashSet<>()).isEmpty();
 	}
