@@ -15,6 +15,10 @@ public class ComputerPlayer extends Player {
 		this.strategy = random;
 	}
 	
+	public void takeTurn(Board board) {
+		makeMove(board);
+	}
+	
 	public int determineMove(Board board) {
 		return strategy.determineMove(board, this.color);
 	}

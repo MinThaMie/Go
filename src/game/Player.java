@@ -19,6 +19,8 @@ public abstract class Player {
 	}
 	
     public abstract int determineMove(Board board);
+    
+    public abstract void takeTurn(Board board);
 	
 	public void makeMove(Board board) {
         int choice = determineMove(board);

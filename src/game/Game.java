@@ -1,5 +1,6 @@
 package game;
 
+import java.util.*;
 import com.nedap.go.gui.GoGUIIntegrator;
 
 public class Game {
@@ -29,7 +30,7 @@ public class Game {
     	this.update();
     	int i = 0;
     	while (i < 25) {
-	    	players[current].makeMove(board);
+	    	players[current].takeTurn(board);
 	    	current = (current == 0) ? 1 : 0;
 	    	this.update();
 	    	i++;
@@ -40,7 +41,7 @@ public class Game {
      * Prints the game situation.
      */
     private void update() {
-        System.out.println("\ncurrent game situation: \n\n" + board.toString()
+        System.out.println("\ncurrent game situation: \n\n" + Arrays.toString(board.getFields())
                 + "\n");
     }
 }

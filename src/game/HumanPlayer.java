@@ -4,29 +4,66 @@ import java.io.*;
 
 public class HumanPlayer extends Player {
 	public static final String EXIT = "exit";
+	public static final String SURRENDER = "surrender";
 
+	public static final String PASS = "pass";
+	public static final String MOVE = "move";
+
+	
 	public HumanPlayer(String name, Stone stone) {
 		super(name, stone);
 	}
 	
+	public void takeTurn(Board board) {
+		String prompt = "> " + getName() + " (" + getColor().toString() + ")"
+                + ", what do you want to do this turn? Move, pass or surrender!";
+		String command = readCommand(prompt);
+		if (command.equals(PASS)) {
+			System.out.println("You passed");
+		} else if (command.equals(EXIT) || command.equals(SURRENDER)) {
+			System.out.println("You wanna go"); //TODO: validate this choice
+		} else if (command.equals(MOVE)) {
+			makeMove(board);
+		} else {
+			System.out.println("You did not provide a valid command, please try again!");
+			takeTurn(board);
+		}
+	}
+	
+	public String readCommand(String prompt) {
+		String command = "NO";
+		String input;
+		BufferedReader line = new BufferedReader(new InputStreamReader(System.in));
+        System.out.println(prompt);
+        try {
+        	input = line.readLine();
+        	String[] splittedInput = splitString(input);
+        	command = splittedInput[0].toLowerCase();
+        } catch (IOException e) {
+        	System.out.println("There is nothing here");
+        }
+        return command;
+	}
+	
+	
 	public int determineMove(Board board) {
         String prompt = "> " + getName() + " (" + getColor().toString() + ")"
                 + ", what is your choice? Please put: x y!";
-        int choice = readChoice(prompt, board);
-        int[] coor = board.coordinate(choice);
-        System.out.println("x" + coor[0] + "y" + coor[1] + " choice " + choice);
+        int move = readMove(prompt, board);
+        int[] coor = board.coordinate(move);
+        System.out.println("x" + coor[0] + "y" + coor[1] + " choice " + move);
 
-        boolean valid = board.isAllowed(choice, getColor());
+        boolean valid = board.isAllowed(move, getColor());
         while (!valid) {
             System.out.println("ERROR: x " + coor[0] + " y " + coor[1]
                     + " is no valid choice.");
-            choice = readChoice(prompt, board);
-            valid = board.isAllowed(choice, getColor());
+            move = readMove(prompt, board);
+            valid = board.isAllowed(move, getColor());
         }
-        return choice;
+        return move;
     }
 
-    private synchronized int readChoice(String prompt, Board board) {
+    private int readMove(String prompt, Board board) {
     	int x = -1;
     	int y = -1;
     	BufferedReader line = new BufferedReader(new InputStreamReader(System.in));
@@ -42,7 +79,7 @@ public class HumanPlayer extends Player {
 		        	y = Integer.parseInt(splittedInput[1]);
 	        	} catch (NumberFormatException e) {
 	        		System.out.println("You did not use integers to send your coordinate. Please input: int int!");
-	        		readChoice(prompt, board);
+	        		readMove(prompt, board);
 	        	}
         	}
         } catch (IOException e) {
