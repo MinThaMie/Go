@@ -12,7 +12,7 @@ public class Game {
     private int current;
 	private GoGUIIntegrator gogui;
 	private boolean playing;
-	private Set<Stone[]> boards;
+	private Set<List<Stone>> boards;
 	
 	public Game(Player s0, Player s1, int dim) {
 		gogui = new GoGUIIntegrator(true, true, dim);
@@ -41,13 +41,22 @@ public class Game {
     	}
     }
 	
-	public Set<Stone[]> getHistory() {
+	public Set<List<Stone>> getHistory() {
 		return this.boards;
 	}
 	
-	//TODO: Think of a test
+	//TODO: Think of a test && 
 	public void addBoard() {
-    	boards.add(board.getFields());
+		Stone[] currentBoard = board.getFields();
+		List<Stone> historyBoard = new ArrayList<>();
+		for (int i = 0; i < currentBoard.length; i++){
+			historyBoard.add(currentBoard[i]);
+		}
+		if (boards.contains(board.getFields())) {
+			System.out.println("Toch wel :");
+		}
+    	boards.add(historyBoard);
+    	System.out.println("added board");
 	}
 
     /**
