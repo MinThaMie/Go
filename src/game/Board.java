@@ -17,6 +17,10 @@ public class Board {
 		this(dim);
 		this.gui = gogui;
 	}
+	
+	public Stone[] getFields() {
+		return this.fields;
+	}
 	//Getters TODO: correct name?
 	/**
 	 * This function tests whether a index is a field on the board.
