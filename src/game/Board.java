@@ -98,7 +98,11 @@ public class Board {
 	}
 		
 	int index(int x, int y) {
-		return x + y * dim;
+		if (x >= 0 && y >= 0) {
+			return x + y * dim;
+		} else {
+			return -1;
+		}
 	}
 	
 	public int[] coordinate(int i) {
