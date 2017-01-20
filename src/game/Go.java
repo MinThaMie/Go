@@ -12,7 +12,7 @@ public class Go {
 	public static void main(String[] args) {
 		Go go = new Go();
     	Player p1 = new HumanPlayer(go.askName(), Stone.BLACK);
-    	Player p2 = new ComputerPlayer(Stone.WHITE);
+    	Player p2 = new HumanPlayer(go.askName(), Stone.WHITE);
     	Game game = new Game(p1, p2, go.askBoardSize());
     	game.start();
 	}
