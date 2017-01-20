@@ -10,11 +10,11 @@ public abstract class Player {
 		this.color = stone;
 	}
 	
-	public String getName(){
+	public String getName() {
 		return name;
 	}
 	
-	public Stone getColor(){
+	public Stone getColor() {
 		return color;
 	}
 	
