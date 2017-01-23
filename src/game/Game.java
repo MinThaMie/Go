@@ -45,7 +45,6 @@ public class Game {
 		return this.boards;
 	}
 	
-	//TODO: Think of a test && 
 	public void addBoard() {
 		List<Stone> historyBoard = copyBoard();
     	boards.add(historyBoard);
