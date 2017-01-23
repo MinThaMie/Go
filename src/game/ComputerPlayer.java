@@ -5,7 +5,6 @@ public class ComputerPlayer extends Player {
 	Strategy strategy;
 	public ComputerPlayer(Strategy strategy, Stone stone) {
 		super(strategy + "-" + stone, stone);
-		this.color = color;
 		this.strategy = strategy;
 	}
 	
