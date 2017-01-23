@@ -47,16 +47,17 @@ public class Game {
 	
 	//TODO: Think of a test && 
 	public void addBoard() {
+		List<Stone> historyBoard = copyBoard();
+    	boards.add(historyBoard);
+	}
+	
+	public List<Stone> copyBoard() {
 		Stone[] currentBoard = board.getFields();
 		List<Stone> historyBoard = new ArrayList<>();
-		for (int i = 0; i < currentBoard.length; i++){
+		for (int i = 0; i < currentBoard.length; i++) {
 			historyBoard.add(currentBoard[i]);
 		}
-		if (boards.contains(board.getFields())) {
-			System.out.println("Toch wel :");
-		}
-    	boards.add(historyBoard);
-    	System.out.println("added board");
+		return historyBoard;
 	}
 
     /**
