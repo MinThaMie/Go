@@ -3,7 +3,7 @@ import java.util.*;
 import com.nedap.go.gui.GoGUIIntegrator;
 
 public class Board {
-	
+	private final static int INVALID = -1;
 	private final int dim;
 	private final Stone[] fields;
 	GoGUIIntegrator gui;
@@ -104,7 +104,7 @@ public class Board {
 		if (x >= 0 && y >= 0) {
 			return x + y * dim;
 		} else {
-			return -1;
+			return INVALID;
 		}
 	}
 	
@@ -233,15 +233,15 @@ public class Board {
 		return neighbours;
 	}
 	public int getTopNeighbour(int x, int y) {
-		return (y - 1 >= 0) ? index(x, y - 1) : -1;
+		return (y - 1 >= 0) ? index(x, y - 1) : INVALID;
 	}
 	public int getBottomNeighbour(int x, int y) {
-		return (y + 1 < dim) ? index(x, y + 1) : -1;
+		return (y + 1 < dim) ? index(x, y + 1) : INVALID;
 	}
 	public int getLeftNeighbour(int x, int y) {
-		return (x - 1 >= 0) ? index(x - 1, y) : -1;
+		return (x - 1 >= 0) ? index(x - 1, y) : INVALID;
 	}
 	public int getRightNeighbour(int x, int y) {
-		return  (x + 1 < dim) ? index(x + 1, y) : -1;
+		return  (x + 1 < dim) ? index(x + 1, y) : INVALID;
 	}
 }

@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 public class Go {
-
+	private final static int DEFAULT_SIZE = 9;
 	public Go() {
 		
 	}
@@ -31,7 +31,7 @@ public class Go {
 	private int askBoardSize() {
 		BufferedReader line = new BufferedReader(new InputStreamReader(System.in));
         System.out.print("What do you want the boardsize to be?");
-        int boardsize = 9;
+        int boardsize = DEFAULT_SIZE;
         try {
         	boardsize = Integer.parseInt(line.readLine());
         } catch (IOException e) {
