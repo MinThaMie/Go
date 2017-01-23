@@ -21,7 +21,6 @@ public class Board {
 	public Stone[] getFields() {
 		return this.fields;
 	}
-	//Getters TODO: correct name?
 	/**
 	 * This function tests whether a index is a field on the board.
 	 * @param i: index of the queried field
@@ -128,7 +127,6 @@ public class Board {
 		return fields[index(x, y)];
 	}
 	
-	//Setters TODO: correct name?
 	/**
 	 * This function sets a field on the board to the provided stone.
 	 * This function is package private.
@@ -164,7 +162,6 @@ public class Board {
 				int[] coor = coordinate(i);
 				if (getField(i) != Stone.EMPTY) {
 					if (getLiberties(coor[0], coor[1], getField(i), new HashSet<>(), new HashSet<>()).isEmpty()) {
-						System.out.println("Should remove " + coor[0] + " " + coor[1]);
 						remove(coor[0], coor[1], getField(i));
 					}
 				}
@@ -187,7 +184,6 @@ public class Board {
 				int[] coor = coordinate(i);
 				if (getField(i) != Stone.EMPTY) {
 					if (getLiberties(coor[0], coor[1], getField(i), new HashSet<>(), new HashSet<>()).isEmpty()) {
-						System.out.println("Should remove " + coor[0] + " " + coor[1]);
 						testRemove(coor[0], coor[1], getField(i));
 					}
 				}
