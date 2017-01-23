@@ -53,12 +53,13 @@ public class HumanPlayer extends Player {
         int[] coor = board.coordinate(move);
         System.out.println("x" + coor[0] + "y" + coor[1] + " choice " + move);
 
-        boolean valid = board.isAllowed(move, getColor());
+        boolean valid = isAllowed(board, coor[0], coor[1], getColor());
         while (!valid) {
             System.out.println("ERROR: x " + coor[0] + " y " + coor[1]
                     + " is no valid choice.");
             move = readMove(prompt, board);
-            valid = board.isAllowed(move, getColor());
+            coor = board.coordinate(move);
+            valid = isAllowed(board, coor[0], coor[1], getColor());
         }
         return move;
     }
