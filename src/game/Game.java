@@ -72,35 +72,38 @@ public class Game {
 		
 		scoreBlack = blackStones;
 		scoreWhite = whiteStones;
+		Map<Stone, Integer> territoryScore = getTerritoryScore(finalBoard);
+		scoreBlack = scoreBlack + territoryScore.get(Stone.BLACK);
+		scoreWhite = scoreWhite + territoryScore.get(Stone.WHITE);
+
 		// for each empty field check whether it's a territory
 	}
 	
-	public Stone determineTerritory(Set<Integer> territoryNeighbours) {
-		if (territoryNeighbours.contains(Stone.BLACK) && territoryNeighbours.contains(Stone.WHITE)) {
-			return null;
-		} else if (territoryNeighbours.contains(Stone.BLACK)) {
-			return Stone.BLACK;
-		} else {
-			return Stone.WHITE;
-		}
-	}
-	
-	public Set<Integer> getTerritoryNeighbours(int x, int y, Stone s, Set<Integer> territoryNeighbours, Set<Integer> chain) {
-		territoryNeighbours.addAll(territoryNeighbours);
-		chain.addAll(chain);
-		int pos = board.index(x, y);
-		Set<Integer> neighbours = board.getNeighbours(x, y);
-		for (int i : neighbours) {
-			if (board.getField(i) != Stone.EMPTY) {
-				chain.add(pos);
-				territoryNeighbours.add(i);
-			} else if (!chain.contains(i) && board.getField(i) == s) {
-				int[] coor = board.coordinate(i);
-				chain.add(pos);
-				territoryNeighbours.addAll(getTerritoryNeighbours(coor[0], coor[1], s, territoryNeighbours, chain));
+	public Map<Stone, Integer> getTerritoryScore(List<Stone> finalBoard) {
+		Set<Integer> checkedStones = new HashSet<>();
+		Map<Stone, Integer> territoryScore = new HashMap<>();
+		territoryScore.put(Stone.BLACK, 0);
+		territoryScore.put(Stone.WHITE, 0);
+		for (Stone i : finalBoard) {
+			if (i == Stone.EMPTY && !checkedStones.contains(finalBoard.indexOf(i))) {
+				int[] coor = board.coordinate(finalBoard.indexOf(i));
+				Set<Integer> emptyTerritory = board.getChain(coor[0], coor[1], i, new HashSet<>());
+				checkedStones.addAll(emptyTerritory);
+				Set<Integer> enclosingStones = board.getNeighbours(emptyTerritory);
+				Integer[] stones = enclosingStones.toArray(new Integer[enclosingStones.size()]);
+				Stone firstColor = board.getField(stones[0]);
+				int colorCount = 0;
+				for (int j : stones) {
+					if (firstColor == board.getField(j)) {
+						colorCount++;
+					}
+				}
+				if (colorCount == stones.length) {
+					territoryScore.put(firstColor, emptyTerritory.size());
+				}
 			}
 		}
-		return territoryNeighbours;
+		return territoryScore;
 	}
 
 	public int getScore(Stone stone) {
@@ -110,6 +113,12 @@ public class Game {
 			return scoreWhite;
 		}
 	}
+	
+	
+	public void makeMove(int x, int y, Stone s){
+		board.testField(x, y, s);
+	}
+	
     /**
      * Prints the game situation.
      */
