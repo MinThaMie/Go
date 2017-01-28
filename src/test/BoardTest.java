@@ -182,6 +182,29 @@ public class BoardTest {
     	assertEquals(Stone.EMPTY, boardFive.getField(1, 0));
     }
     
+    @Test
+    public void testUsefullSuicide() {
+    	//Outer circle
+    	boardFive.testField(2, 0, Stone.BLACK);
+    	boardFive.testField(1, 1, Stone.BLACK);
+    	boardFive.testField(3, 1, Stone.BLACK);
+    	boardFive.testField(0, 2, Stone.BLACK);
+    	boardFive.testField(4, 2, Stone.BLACK);
+    	boardFive.testField(1, 3, Stone.BLACK);
+    	boardFive.testField(3, 3, Stone.BLACK);
+    	boardFive.testField(2, 4, Stone.BLACK);
+    	//Inner Circle
+    	boardFive.testField(2, 1, Stone.WHITE);
+    	boardFive.testField(1, 2, Stone.WHITE);
+    	boardFive.testField(3, 2, Stone.WHITE);
+    	boardFive.testField(2, 3, Stone.WHITE);
+
+    	boardFive.testField(1, 0, Stone.BLACK);
+    	assertEquals(Stone.BLACK, boardFive.getField(2, 2));
+    	assertEquals(Stone.EMPTY, boardFive.getField(1, 2));
+
+    }
+    
     @Test //TODO: implement Ko in de game
     public void testPlacement() {
     	boardFive.testField(0, 1, Stone.WHITE);

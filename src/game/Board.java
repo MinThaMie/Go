@@ -167,13 +167,13 @@ public class Board {
 		int[] coor = coordinate(i);
 		testField(coor[0], coor[1], s);
 	}
-	
+	//TODO: check how to use getChain + chain neighbours here. Breaks the selfSuicide test
 	public void testField(int x, int y, Stone s) {
 		int index = index(x, y);
 		if (isAllowed(x, y, s)) {
 			fields[index] = s;
-			Set<Integer> chain = getChain(x, y, s, new HashSet<>());
-			Set<Integer> neighbours = getNeighbours(chain);
+			getChain(x, y, s, new HashSet<>());
+			Set<Integer> neighbours = getNeighbours(x, y);
 			for (int i : neighbours) {
 				int[] coor = coordinate(i);
 				if (getField(i) != Stone.EMPTY) {
