@@ -21,7 +21,7 @@ public class HumanPlayer extends Player {
 		if (command.equals(PASS)) {
 			System.out.println("You passed");
 		} else if (command.equals(EXIT) || command.equals(SURRENDER)) {
-			System.out.println("You wanna go"); //TODO: validate this choice
+			System.out.println("You wanna go"); //TODO: validate this choice && implement
 		} else if (command.equals(MOVE)) {
 			makeMove(board);
 		} else {

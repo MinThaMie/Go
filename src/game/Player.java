@@ -31,12 +31,11 @@ public abstract class Player {
     }
 	
 	public boolean isAllowed(Board board, int x, int y, Stone s) {
-		boolean empty = board.isEmpty(x, y); //Is already checked by testField so could be removed either from there or from here
+		boolean empty = board.isEmpty(x, y); 
 		Board copy = copyBoard(board);
 		copy.testField(x, y, s);
 		boolean ko = isKo(copy);
 		return empty && !ko;
-		// if x y !getLiberties && 1 of neighbours getLiberties.isEmpty --> allowed and remove neighbour
 	}
 	
 	public Set<List<Stone>> getHistory() {

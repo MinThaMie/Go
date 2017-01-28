@@ -146,18 +146,16 @@ public class Board {
 	 */
 	public void setField(int x, int y, Stone s) {
 		int index = index(x, y);
-		if (isAllowed(x, y, s)) {
-			boolean white = s == Stone.WHITE;
-			gui.addStone(x, y, white);
-			fields[index] = s;
-			getChain(x, y, s, new HashSet<>());
-			Set<Integer> neighbours = getNeighbours(x, y);
-			for (int i : neighbours) {
-				int[] coor = coordinate(i);
-				if (getField(i) != Stone.EMPTY) {
-					if (getLiberties(coor[0], coor[1], getField(i), new HashSet<>()).isEmpty()) {
-						remove(coor[0], coor[1], getField(i));
-					}
+		boolean white = s == Stone.WHITE;
+		gui.addStone(x, y, white);
+		fields[index] = s;
+		getChain(x, y, s, new HashSet<>());
+		Set<Integer> neighbours = getNeighbours(x, y);
+		for (int i : neighbours) {
+			int[] coor = coordinate(i);
+			if (getField(i) != Stone.EMPTY) {
+				if (getLiberties(coor[0], coor[1], getField(i), new HashSet<>()).isEmpty()) {
+					remove(coor[0], coor[1], getField(i));
 				}
 			}
 		}
@@ -170,16 +168,14 @@ public class Board {
 	//TODO: check how to use getChain + chain neighbours here. Breaks the selfSuicide test
 	public void testField(int x, int y, Stone s) {
 		int index = index(x, y);
-		if (isAllowed(x, y, s)) {
-			fields[index] = s;
-			getChain(x, y, s, new HashSet<>());
-			Set<Integer> neighbours = getNeighbours(x, y);
-			for (int i : neighbours) {
-				int[] coor = coordinate(i);
-				if (getField(i) != Stone.EMPTY) {
-					if (getLiberties(coor[0], coor[1], getField(i), new HashSet<>()).isEmpty()) {
-						testRemove(coor[0], coor[1], getField(i));
-					}
+		fields[index] = s;
+		getChain(x, y, s, new HashSet<>());
+		Set<Integer> neighbours = getNeighbours(x, y);
+		for (int i : neighbours) {
+			int[] coor = coordinate(i);
+			if (getField(i) != Stone.EMPTY) {
+				if (getLiberties(coor[0], coor[1], getField(i), new HashSet<>()).isEmpty()) {
+					testRemove(coor[0], coor[1], getField(i));
 				}
 			}
 		}
@@ -201,14 +197,7 @@ public class Board {
 		}
 	}
 	
-	public boolean isAllowed(int i, Stone s) {
-		int[] coor = coordinate(i);
-		return isAllowed(coor[0], coor[1], s);
-	}
 	
-	public boolean isAllowed(int x, int y, Stone s) {
-		return isEmpty(x, y);
-	}
 // Neighbours	
 	public Set<Integer> getNeighbours(Set<Integer> chain) {
 		Set<Integer> neighbours = new HashSet<>();
