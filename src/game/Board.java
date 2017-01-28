@@ -59,7 +59,7 @@ public class Board {
 	 * Returns whether an coordinate has liberties on the board.
 	 */
 	public boolean hasLiberties(int x, int y, Stone s) {
-		return getLiberties(x, y, s, new HashSet<>(), new HashSet<>()).size() > 0;
+		return getLiberties(x, y, s, new HashSet<>()).size() > 0;
 	}
 	
 	public Set<Integer> getChain(int x, int y, Stone s, Set<Integer> set) {
@@ -82,20 +82,14 @@ public class Board {
 	 * If the stone chains with another stone it calls the method getChainLiberties.
 	 * @return a set with the indices that are the liberties of a certain stone
 	 */
-	public Set<Integer> getLiberties(int x, int y, Stone s, Set<Integer> liberties, Set<Integer> chain) {
+	public Set<Integer> getLiberties(int x, int y, Stone s, Set<Integer> liberties) {
 		liberties.addAll(liberties);
-		chain.addAll(chain);
-		int pos = index(x, y);
-		Set<Integer> neighbours = getNeighbours(x, y);
+		Set<Integer> chain = getChain(x, y, s, new HashSet<>());
+		Set<Integer> neighbours = getNeighbours(chain);
 		for (int i : neighbours) {
 			if (getField(i) == Stone.EMPTY) {
-				chain.add(pos);
 				liberties.add(i);
-			} else if (!chain.contains(i) && getField(i) == s) {
-				int[] coor = coordinate(i);
-				chain.add(pos);
-				liberties.addAll(getLiberties(coor[0], coor[1], s, liberties, chain));
-			}
+			} 
 		}
 		return liberties;
 	}
@@ -161,7 +155,7 @@ public class Board {
 			for (int i : neighbours) {
 				int[] coor = coordinate(i);
 				if (getField(i) != Stone.EMPTY) {
-					if (getLiberties(coor[0], coor[1], getField(i), new HashSet<>(), new HashSet<>()).isEmpty()) {
+					if (getLiberties(coor[0], coor[1], getField(i), new HashSet<>()).isEmpty()) {
 						remove(coor[0], coor[1], getField(i));
 					}
 				}
@@ -178,12 +172,12 @@ public class Board {
 		int index = index(x, y);
 		if (isAllowed(x, y, s)) {
 			fields[index] = s;
-			getChain(x, y, s, new HashSet<>());
-			Set<Integer> neighbours = getNeighbours(x, y);
+			Set<Integer> chain = getChain(x, y, s, new HashSet<>());
+			Set<Integer> neighbours = getNeighbours(chain);
 			for (int i : neighbours) {
 				int[] coor = coordinate(i);
 				if (getField(i) != Stone.EMPTY) {
-					if (getLiberties(coor[0], coor[1], getField(i), new HashSet<>(), new HashSet<>()).isEmpty()) {
+					if (getLiberties(coor[0], coor[1], getField(i), new HashSet<>()).isEmpty()) {
 						testRemove(coor[0], coor[1], getField(i));
 					}
 				}
@@ -216,6 +210,17 @@ public class Board {
 		return isEmpty(x, y);
 	}
 // Neighbours	
+	public Set<Integer> getNeighbours(Set<Integer> chain) {
+		Set<Integer> neighbours = new HashSet<>();
+		for (int i : chain) {
+			int[] coor = coordinate(i);
+			int x = coor[0];
+			int y = coor[1];
+			neighbours.addAll(getNeighbours(x, y));
+		}
+		return neighbours;
+	}
+	
 	public Set<Integer> getNeighbours(int x, int y) {
 		Set<Integer> neighbours = new HashSet<>();
 		if (getTopNeighbour(x, y) >= 0) {
