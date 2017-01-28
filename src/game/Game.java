@@ -52,11 +52,11 @@ public class Game {
 	}
 	
 	public void addBoard() {
-		List<Stone> historyBoard = copyBoard();
+		List<Stone> historyBoard = listBoard();
     	boards.add(historyBoard);
 	}
 	
-	public List<Stone> copyBoard() {
+	public List<Stone> listBoard() {
 		Stone[] currentBoard = board.getFields();
 		List<Stone> historyBoard = new ArrayList<>();
 		for (int i = 0; i < currentBoard.length; i++) {
@@ -66,7 +66,7 @@ public class Game {
 	}
 	
 	public void calculateScore() {
-		List<Stone> finalBoard = copyBoard();
+		List<Stone> finalBoard = listBoard();
 		int blackStones = Collections.frequency(finalBoard, Stone.BLACK);
 		int whiteStones = Collections.frequency(finalBoard, Stone.WHITE);
 		
@@ -79,15 +79,15 @@ public class Game {
 		// for each empty field check whether it's a territory
 	}
 	
-	public Map<Stone, Integer> getTerritoryScore(List<Stone> finalBoard) {
+	private Map<Stone, Integer> getTerritoryScore(List<Stone> finalBoard) {
 		Set<Integer> checkedStones = new HashSet<>();
 		Map<Stone, Integer> territoryScore = new HashMap<>();
 		territoryScore.put(Stone.BLACK, 0);
 		territoryScore.put(Stone.WHITE, 0);
-		for (Stone i : finalBoard) {
-			if (i == Stone.EMPTY && !checkedStones.contains(finalBoard.indexOf(i))) {
-				int[] coor = board.coordinate(finalBoard.indexOf(i));
-				Set<Integer> emptyTerritory = board.getChain(coor[0], coor[1], i, new HashSet<>());
+		for (int i = 0; i < finalBoard.size(); i++) {
+			if (finalBoard.get(i) == Stone.EMPTY && !checkedStones.contains(i)) {
+				int[] coor = board.coordinate(i);
+				Set<Integer> emptyTerritory = board.getChain(coor[0], coor[1], finalBoard.get(i), new HashSet<>());
 				checkedStones.addAll(emptyTerritory);
 				Set<Integer> enclosingStones = board.getNeighbours(emptyTerritory);
 				Integer[] stones = enclosingStones.toArray(new Integer[enclosingStones.size()]);
@@ -99,7 +99,7 @@ public class Game {
 					}
 				}
 				if (colorCount == stones.length) {
-					territoryScore.put(firstColor, emptyTerritory.size());
+					territoryScore.put(firstColor, territoryScore.get(firstColor) + emptyTerritory.size());
 				}
 			}
 		}
@@ -114,9 +114,18 @@ public class Game {
 		}
 	}
 	
+	//TODO: Implement draw
+	public Stone getWinner() {
+		return scoreBlack > scoreWhite ? Stone.BLACK : Stone.WHITE;
+	}
 	
-	public void makeMove(int x, int y, Stone s){
-		board.testField(x, y, s);
+	//TODO: check this with player.TakeTurn
+	public void makeMove(int x, int y, Stone s) {
+		if (isAllowed(x, y, s)) {
+			board.testField(x, y, s);
+		} else {
+			System.out.println("You have been removed from the server");
+		}
 	}
 	
     /**
@@ -126,4 +135,37 @@ public class Game {
         System.out.println("\ncurrent game situation: \n\n" + Arrays.toString(board.getFields())
                 + "\n");
     }
+    
+    //----Rules----
+    
+    public boolean isAllowed(int x, int y, Stone s) {
+    	boolean isEmpty = board.isEmpty(x, y);
+		Board copy = copyBoard();
+		copy.testField(x, y, s);
+		boolean ko = isKo(copy);
+		return isEmpty && !ko;
+	}
+	
+	public boolean isKo(Board copy) {
+		return boards.contains(listBoard(copy));
+	}
+	public List<Stone> listBoard(Board copy) {
+		Stone[] currentBoard = copy.getFields();
+		List<Stone> historyBoard = new ArrayList<>();
+		for (int i = 0; i < currentBoard.length; i++) {
+			historyBoard.add(currentBoard[i]);
+		}
+		return historyBoard;
+	}
+	
+	public Board copyBoard() {
+		Stone[] currentBoard = board.getFields();
+		Board copyBoard = new Board(board.getBoardSize());
+		for (int i = 0; i < currentBoard.length; i++) {
+			if (!(currentBoard[i] == Stone.EMPTY)) {
+				copyBoard.testField(i, currentBoard[i]);
+			}
+		}
+		return copyBoard;
+	}
 }
