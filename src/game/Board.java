@@ -218,6 +218,7 @@ public class Board {
 			int y = coor[1];
 			neighbours.addAll(getNeighbours(x, y));
 		}
+		neighbours.removeAll(chain);
 		return neighbours;
 	}
 	
