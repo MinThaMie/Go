@@ -5,6 +5,8 @@ import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
+import communication.ClientHandler.Keyword;
+
 
 public class Client extends Thread {
 	public static void main(String[] args) {
@@ -61,15 +63,26 @@ public class Client extends Thread {
 	}
 	
 	public void run() {
-		handleStreamInput();
+		handleServerInput();
 	}
 	
-	public void handleStreamInput() {
+	public void handleServerInput() {
 		print("Welcome to our chatroom. Type exit to leave");
 		try {
 	    	String msg;
 	    	while ((msg = in.readLine()) != null) {
 	    		print(msg);
+	    		try {
+    				String[] msgParts = msg.split(" ");
+    				Keyword keyword = Keyword.valueOf(msgParts[0]);
+    				switch (keyword) {
+		    			case WAITING: 
+		    				print("You are in the que waiting for somebody");
+		    				break;
+    				}
+    			} catch	(IllegalArgumentException e) {
+    				sendMessage(Keyword.WARNING + " The server does not now this keyword");
+    			}
 	    	}
 		} catch (IOException e) {
 			System.out.println("Cannot read from socket");
