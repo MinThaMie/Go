@@ -33,7 +33,7 @@ public class Board {
 	// overloading a function or using the index function
 	public boolean isField(int x, int y) {
 		int index = index(x, y);
-		return index >= 0 && index < fields.length;
+		return isField(index);
 	}
 	/**
 	 * This function checks whether a field is empty or not.
@@ -158,6 +158,9 @@ public class Board {
 					remove(coor[0], coor[1], getField(i));
 				}
 			}
+		}
+		if (getLiberties(x, y, s, new HashSet<>()).isEmpty()) {
+			remove(x,y,s);
 		}
 	}
 	

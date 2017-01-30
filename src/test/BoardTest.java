@@ -182,7 +182,6 @@ public class BoardTest {
     	assertEquals(Stone.EMPTY, boardFive.getField(1, 0));
     }
     
-    //TODO: Fix this test
     @Test
     public void testUsefullSuicide() {
     	//Outer circle
@@ -200,7 +199,7 @@ public class BoardTest {
     	boardFive.testField(3, 2, Stone.WHITE);
     	boardFive.testField(2, 3, Stone.WHITE);
 
-    	boardFive.testField(1, 0, Stone.BLACK);
+    	boardFive.testField(2, 2, Stone.BLACK);
     	assertEquals(Stone.BLACK, boardFive.getField(2, 2));
     	assertEquals(Stone.EMPTY, boardFive.getField(1, 2));
 
