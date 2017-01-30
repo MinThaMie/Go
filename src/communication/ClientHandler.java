@@ -8,7 +8,9 @@ public class ClientHandler extends Thread {
     private BufferedReader in;
     private BufferedWriter out;
     private String clientName;
-
+    
+    public enum Keyword { PLAYER, EXIT, GO, WAITING, READY, MOVE, VALID, INVALID, PASS, PASSED, TABLEFLIP, TABLEFLIPPED, CHAT, WARNING, END, CANCEL }
+    
     public ClientHandler(Server serverArg, Socket sockArg) throws IOException {
     	server = serverArg;
     	in = new BufferedReader(new InputStreamReader(sockArg.getInputStream()));
@@ -16,8 +18,8 @@ public class ClientHandler extends Thread {
     }
 
     public void announce() throws IOException {
-        clientName = in.readLine();
-        server.broadcast("[" + clientName + " has entered] ");
+        clientName = in.readLine().toLowerCase();
+        server.broadcast(Keyword.PLAYER + " " + clientName);
     }
 
     public void run() {
@@ -26,12 +28,27 @@ public class ClientHandler extends Thread {
         	
         	String msg;
     		while ((msg = in.readLine()) != null) {
-    			if (msg.equals("exit")) {
-    				System.out.println("This client wants to exit " + clientName);
-	    			break;
-	    		} else {
-	    			server.broadcast("[" + clientName + "] " + msg);
-	    		}
+    			server.print(msg); //To meet requirement 4 for the server, page 7
+    			try {
+    				String[] msgParts = msg.split(" ");
+    				Keyword keyword = Keyword.valueOf(msgParts[0]);
+    				switch (keyword) {
+		    			case EXIT :
+		    				server.broadcast(Keyword.WARNING + " " + clientName + " has left the server");
+		    				shutdown();
+		    				break;
+		    			case GO:
+		    				server.addToGameLobby(clientName, Integer.parseInt(msgParts[1])); //TODO: implement check for boardconstraints
+		    				break;
+		    			case CANCEL: 
+		    				server.removeFromGameLobby(clientName);
+		    			case CHAT: 
+		    				server.broadcast(msg);
+    				}
+    			} catch	(IllegalArgumentException e) {
+    				sendMessage(Keyword.WARNING + " The server does not now this keyword");
+    			}
+    			
     		}
     	} catch (IOException e) {
     		shutdown();
@@ -58,5 +75,9 @@ public class ClientHandler extends Thread {
         } catch (IOException e) {
     		e.printStackTrace();
     	} 
+    }
+    
+    public String getClientName() {
+    	return clientName;
     }
 }
