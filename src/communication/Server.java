@@ -11,11 +11,11 @@ import game.*;
 
 public class Server {
 	public static final Integer DEFAULT_PORT = 2772;
-	public static final String SERVER_WELCOME_MSG = "Welcome to our Server!" + '\n'
-														+ "You can use the following keywords:" + '\n'
-														+ "GO boardsize --> To start a game of Go on your chosen size" + '\n'
-														+ "CHAT message --> Chat with the other people on the server" + '\n'
-														+ "eXIT --> you leave the server" + '\n';
+	public static final String SERVER_WELCOME_MSG = "CHAT Welcome to our Server!" + '\n'
+														+ "CHAT You can use the following keywords:" + '\n'
+														+ "CHAT GO boardsize --> To start a game of Go on your chosen size" + '\n'
+														+ "CHAT CHAT message --> Chat with the other people on the server" + '\n'
+														+ "CHAT EXIT --> you leave the server" + '\n';
 	public static void main(String[] args) {
         Server server = new Server();
         server.run();
@@ -92,39 +92,45 @@ public class Server {
         System.out.println(message);
     }
 	
-	public void addToGameLobby(String name, Integer dimention) {
+	public void addToGameLobby(String name, Integer dimention, ClientHandler t) {
 		gameLobby.put(name, dimention);
 		if (!dimMap.containsKey(dimention)) {
 			dimMap.put(dimention, new HashSet<>());		
 		}
 		dimMap.get(dimention).add(name);
-		System.out.println("current gameLobby " + gameLobby.toString());
-		System.out.println(checkForPair());
+		t.sendMessage(Keyword.WAITING.toString());
+		checkForPair();
 	}
 	
 	public void removeFromGameLobby(String name) {
+		dimMap.get(gameLobby.get(name)).remove(name);
 		gameLobby.remove(name);
-		dimMap.remove(gameLobby.get(name), name);
-		System.out.println("current gameLobby " + gameLobby.toString());
 	}
 	
-	private boolean checkForPair() { 
+	private void checkForPair() { 
 		for (Integer i : dimMap.keySet()) {
 			if (dimMap.get(i).size() >= 2) {
 				String[] players = dimMap.get(i).toArray(new String[dimMap.size()]);
 				Player p1 = new HumanPlayer(players[0], Stone.BLACK);
 				Player p2 = new HumanPlayer(players[1], Stone.WHITE);
 				Game game = new Game(p1, p2, i);
-				//threads.get(threads.indexOf(players[0])).sendMessage(Keyword.READY + " " + "black" + " " + players[1] + " " + i);
-				//threads.get(threads.indexOf(players[1])).sendMessage(Keyword.READY + " " + "white" + " " + players[0] + " " + i);
-				game.start();
+				ClientHandler t1 = null;
+				ClientHandler t2 = null;
+				for (ClientHandler t : threads) {
+					if (t.getName().equals(players[0])) {
+						t1 = t;
+					} else if (t.getName().equals(players[1])) {
+						t2 = t;
+					}
+				}
+				game.start(); //TODO: Add this to a new thread
 				games.add(game);
+				t1.sendMessage(Keyword.READY + " " + "black" + " " + players[1] + " " + i);
+				t2.sendMessage(Keyword.READY + " " + "white" + " " + players[0] + " " + i);
 				removeFromGameLobby(players[0]);
 				removeFromGameLobby(players[1]);
-				return true;
 			}
 		}
-		return false;
 	}
 
     
