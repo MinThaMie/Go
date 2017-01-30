@@ -38,12 +38,14 @@ public class ClientHandler extends Thread {
 		    				shutdown();
 		    				break;
 		    			case GO:
-		    				server.addToGameLobby(clientName, Integer.parseInt(msgParts[1])); //TODO: implement check for boardconstraints
+		    				server.addToGameLobby(clientName, Integer.parseInt(msgParts[1]), this); //TODO: implement check for boardconstraints
 		    				break;
 		    			case CANCEL: 
 		    				server.removeFromGameLobby(clientName);
+		    				break;
 		    			case CHAT: 
 		    				server.broadcast(msg);
+		    				break;
     				}
     			} catch	(IllegalArgumentException e) {
     				sendMessage(Keyword.WARNING + " The server does not now this keyword");
