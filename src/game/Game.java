@@ -114,9 +114,16 @@ public class Game {
 		}
 	}
 	
-	//TODO: Implement draw
-	public Stone getWinner() {
-		return scoreBlack > scoreWhite ? Stone.BLACK : Stone.WHITE;
+	public String getWinner() {
+		String winner;
+		if (scoreBlack == scoreWhite){
+			winner = "There is no winner, it's a draw!";
+		} else if (scoreBlack > scoreWhite) {
+			winner = "Black has won!";
+		} else {
+			winner = "White has won";
+		}
+		return winner;
 	}
 	
 	//TODO: check this with player.TakeTurn
