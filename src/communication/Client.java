@@ -10,19 +10,20 @@ public class Client extends Thread {
 	public static void main(String[] args) {
 		InetAddress host = null;
 		int port = 0;
-
-		try {
-			host = InetAddress.getByName(readString("To which ip-adress do you want to connect: ")); //takes a string
-		} catch (UnknownHostException e) {
-			print("ERROR: no valid hostname!");
-			System.exit(0);
+		
+		while (host == null) {
+			try {
+				host = InetAddress.getByName(readString("To which ip-adress do you want to connect: ")); //takes a string
+			} catch (UnknownHostException e) {
+				print("ERROR: no valid hostname! Please try again.");
+			}
 		}
-
-		try {
-			port = Integer.parseInt(readString("To which port do you want to connect: ")); 
-		} catch (NumberFormatException e) {
-			print("ERROR: no valid portnummer!");
-			System.exit(0);
+		while (port == 0) {
+			try {
+				port = Integer.parseInt(readString("To which port do you want to connect: ")); 
+			} catch (NumberFormatException e) {
+				print("ERROR: no valid portnummer!");
+			}
 		}
 
 		try {
@@ -43,6 +44,7 @@ public class Client extends Thread {
 		}
 
 	}
+	
 	
 	private Socket sock;
 	private BufferedReader in;
