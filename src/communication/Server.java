@@ -25,10 +25,11 @@ public class Server {
 	private Integer port;
 	private ServerSocket ssock;
     private LinkedList<ClientHandler> threads;
-    private LinkedList<Game> games;
+    private HashMap<ClientHandler, Game> clientListGames;
     private HashMap<String, Integer> gameLobby;
     private Map<Integer, Set<String>> dimMap;
-
+    private Map<Game, Set<ClientHandler>> gameListClients;
+    
 	public Server() {
 		while (ssock == null) {
 	    	port = askPort();
@@ -39,9 +40,10 @@ public class Server {
 		    }
 		}
     	threads = new LinkedList<>();
-    	games = new LinkedList<>();
+    	clientListGames = new HashMap<>();
     	gameLobby = new HashMap<>();
     	dimMap = new HashMap<>();
+    	gameListClients = new HashMap<>();
     }
 	
 	private Integer askPort() {
@@ -157,6 +159,26 @@ public class Server {
      */
     public void addHandler(ClientHandler handler) {
     	threads.add(handler);
+    }
+    
+    public void addGame(Game game, ClientHandler t1, ClientHandler t2) {
+    	clientListGames.put(t1, game);
+    	clientListGames.put(t2, game);
+    	if (!gameListClients.containsKey(game)) {
+    		gameListClients.put(game, new HashSet<>());		
+		}
+    	gameListClients.get(game).add(t1);
+    	gameListClients.get(game).add(t2);
+
+    }
+    
+    public Game getGame(ClientHandler t1) {
+    	return clientListGames.get(t1);
+    }
+    
+    public void removeGame(ClientHandler t1) {
+    	gameListClients.get(gameLobby.get(t1)).remove(t1);
+    	clientListGames.remove(t1);
     }
     
     /**
