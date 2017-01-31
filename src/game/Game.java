@@ -15,6 +15,8 @@ public class Game extends Thread {
 	private Set<List<Stone>> boards;
 	private int scoreBlack;
 	private int scoreWhite;
+    private int passes;
+
 	
 	public Game(int dim) {
 		board = new Board(dim);
@@ -30,6 +32,7 @@ public class Game extends Thread {
         players.put(s0.getName(), s0);
         players.put(s1.getName(), s1);
         current = 0;
+        passes = 0;
     }
 	
 	public void run() {
@@ -46,7 +49,7 @@ public class Game extends Thread {
 	}
 	
 	private void play() {
-    	this.showBoardState();
+    	//this.showBoardState();
     }
 	
 	public void doMove(int x, int y, Stone s) {
@@ -59,7 +62,15 @@ public class Game extends Thread {
     		System.err.println("I've been summonned but I wanted to sleep");
     	}
 		current = (current == 0) ? 1 : 0;
-    	this.showBoardState();
+    	//this.showBoardState();
+	}
+	
+	public int getPasses() {
+		return passes;
+	}
+	
+	public void setPasses(int newAmount) {
+		passes = newAmount;
 	}
 	
 	public void stopGame() {
