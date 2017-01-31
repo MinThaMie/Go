@@ -3,7 +3,7 @@ package game;
 import java.util.*;
 import com.nedap.go.gui.GoGUIIntegrator;
 
-public class Game {
+public class Game extends Thread {
 	
 	public static final int NUMBER_PLAYERS = 2;
 
@@ -32,7 +32,7 @@ public class Game {
         current = 0;
     }
 	
-	public void start() {
+	public void run() {
 		playing = true;
 		play();
 	}
@@ -116,7 +116,7 @@ public class Game {
 	
 	public String getWinner() {
 		String winner;
-		if (scoreBlack == scoreWhite){
+		if (scoreBlack == scoreWhite) {
 			winner = "There is no winner, it's a draw!";
 		} else if (scoreBlack > scoreWhite) {
 			winner = "Black has won!";

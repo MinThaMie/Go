@@ -160,7 +160,7 @@ public class Board {
 			}
 		}
 		if (getLiberties(x, y, s, new HashSet<>()).isEmpty()) {
-			remove(x,y,s);
+			remove(x, y, s);
 		}
 	}
 	
