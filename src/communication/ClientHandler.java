@@ -43,6 +43,11 @@ public class ClientHandler extends Thread {
 				try {
 					String[] msgParts = msg.split(" ");
 					Keyword keyword = Keyword.valueOf(msgParts[0]);
+					Stone moveStone = null;
+					if (server.getGame(this) != null) {
+						HashMap<String, Player> players = server.getGame(this).getPlayers();
+						moveStone = players.get(clientName).getColor();
+    				}
 					switch (keyword) {
 		    			case EXIT : 
 		    				server.broadcast(Keyword.WARNING + " " + clientName + " has left the server");
@@ -63,12 +68,10 @@ public class ClientHandler extends Thread {
 		    			case CHAT: 
 		    				server.broadcast(msg);
 		    				break;
+    			
 		    			case MOVE:
-		    				HashMap<String, Player> players = server.getGame(this).getPlayers();
-		    				Stone moveStone = players.get(clientName).getColor();
 		    				String color = server.getGame(this).getCurrentPlayer();
 		    				Stone turnStone = stringToStone(color);
-		    				System.out.println("I wanna move " + clientName +" " + moveStone.toString() + " turn: " + color + " " + turnStone.toString());
 		    				if (turnStone.equals(moveStone)) {
 			    				try {
 				    				int x = Integer.parseInt(msgParts[1]);
@@ -77,6 +80,7 @@ public class ClientHandler extends Thread {
 				    				if (server.getGame(this).isAllowed(x, y, moveStone)) { 
 				    					server.broadcastInGame(this, Keyword.VALID + " " + color +  " " + x + " " + y); 
 				    					server.getGame(this).doMove(x, y, moveStone);
+				    					server.getGame(this).setPasses(0);
 				    				} else {
 				    					server.broadcastInGame(this, Keyword.INVALID + " " + color + " You did something very wrong, you will be kicked");
 				    					server.kick(this);
@@ -94,6 +98,22 @@ public class ClientHandler extends Thread {
 		    					server.broadcastInGame(this, Keyword.END + " -1 -1");
 		    				}
 	    					break;
+		    			case PASS:
+		    				server.getGame(this).setPasses(server.getGame(this).getPasses() + 1);
+		    				server.broadcastInGame(this, Keyword.PASSED + " " + stoneToString(moveStone));
+		    				if (server.getGame(this).getPasses() == 2) {
+		    					server.getGame(this).calculateScore();
+		    					int blackScore = server.getGame(this).getScore(Stone.BLACK);
+		    					int whiteScore = server.getGame(this).getScore(Stone.WHITE);
+		    					server.broadcastInGame(this, Keyword.END + " " + blackScore + " " + whiteScore);
+		    				}
+		    				break;
+		    			case TABLEFLIP:
+		    				server.broadcastInGame(this, Keyword.TABLEFLIPPED + " " + stoneToString(moveStone));
+	    					server.broadcastInGame(this, Keyword.END + " -1 -1");
+		    				break;
+	    				default:
+	    					break;
 					} 
 				} catch	(IllegalArgumentException e) {
     				sendMessage(Keyword.WARNING + " The server does not now this keyword");
@@ -108,6 +128,10 @@ public class ClientHandler extends Thread {
 
 	private Stone stringToStone(String color) {
 		return color.equals("black") ? Stone.BLACK : Stone.WHITE;
+	}
+	
+	private String stoneToString(Stone stone) {
+		return stone == Stone.BLACK ? "black" : "white";
 	}
 
 	public boolean checkDimentions(String dimention) {
