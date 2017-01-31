@@ -39,10 +39,8 @@ public class Client extends Thread {
 			client.sendMessage(myName);
 			client.start();
 			
-			
-			//Dit zorgt ervoor dat het direct bij enter naar de client handler wordt gestuurt
 			do {
-				String input = handleTerminalInput();
+				String input = handleTerminalInput(client);
 				client.sendMessage(input);
 			} while (true);
 			
@@ -67,6 +65,7 @@ public class Client extends Thread {
 	public Client(String name, InetAddress host, int port)
 			throws IOException {
 		this.name = name;
+		game = null;
 		sock = new Socket(host, port);
 		in = new BufferedReader(new InputStreamReader(sock.getInputStream()));
     	out = new BufferedWriter(new OutputStreamWriter(sock.getOutputStream()));
@@ -80,7 +79,6 @@ public class Client extends Thread {
 		try {
 	    	String msg;
 	    	while ((msg = in.readLine()) != null) {
-	    		//print(msg);	
 	    		try {
     				String[] msgParts = msg.split(" ");
     				Keyword keyword = Keyword.valueOf(msgParts[0]);
@@ -136,7 +134,7 @@ public class Client extends Thread {
 		}
 	}
 	
-	public static String handleTerminalInput() {
+	public static String handleTerminalInput(Client client) {
 		String msg = "";
 		try {
 	    	BufferedReader terminalIn = new BufferedReader(new InputStreamReader(
@@ -147,7 +145,23 @@ public class Client extends Thread {
     				Keyword keyword = Keyword.valueOf(msgParts[0]);
     				switch (keyword) {
 		    			case MOVE: 
-		    				print(msg);
+		    				if (client.game != null && client.myTurn) {
+			    				try {
+				    				int x = Integer.parseInt(msgParts[1]);
+				    				int y = Integer.parseInt(msgParts[2]);
+				    				
+				    				if (client.game.isAllowed(x, y, client.stringToStone(client.color))) { 
+				    					client.game.doMove(x, y, client.stringToStone(client.color));
+				    					return msg; 
+				    				} else {
+				    					print(Keyword.WARNING + " apperently your chosen field is not valid, please try again!");
+				    				}
+			    				} catch (NumberFormatException e) {
+			    					print(Keyword.WARNING + " you did not provide ints as coordinates, please try again!");
+			    				}
+		    				} else {
+		    					print(Keyword.WARNING + " You tried to move before there was a game.");
+		    				}
 		    				break;
 		    			default: 
 		    				return msg;
@@ -188,6 +202,7 @@ public class Client extends Thread {
 		print("Closing socket connection...");
 		try {
 			in.close();
+			System.in.close(); //Might be a bit harsh when someone exits TODO: keep the option open to connect to another server
 			out.close();
 			sock.close();
 		} catch (IOException e) {
