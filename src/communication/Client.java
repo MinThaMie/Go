@@ -97,9 +97,12 @@ public class Client extends Thread {
 		    			case VALID: 
 		    				print(msgParts[1] + " made a valid move!");
 		    				break;
+		    			case CHAT: 
+		    				print(msg);
+		    				break;
     				}
     			} catch	(IllegalArgumentException e) {
-    				sendMessage(Keyword.WARNING + " The server does not now this keyword"); //TODO: rewrite this exception msg
+    				sendMessage(Keyword.WARNING + " The server gave your a unknown keyword, you have a problem");
     			}
 	    	}
 		} catch (IOException e) {
