@@ -145,6 +145,12 @@ public class Server {
         }
     }
     
+    public synchronized void broadcastInGame(ClientHandler handler, String msg) {
+        for (ClientHandler h : gameListClients.get(clientListGames.get(handler))) {
+        	h.sendMessage(msg);
+        }
+    }
+    
     /**
      * Add a ClientHandler to the collection of ClientHandlers.
      * @param handler ClientHandler that will be added
