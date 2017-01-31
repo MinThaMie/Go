@@ -129,6 +129,8 @@ public class Client extends Thread {
 		    			case MOVE: 
 		    				print(msg);
 		    				break;
+		    			default: 
+		    				return msg;
     				}
     			} catch	(IllegalArgumentException e) {
     				print(Keyword.WARNING + " you typed something unknow to the server");
