@@ -112,6 +112,16 @@ public class Client extends Thread {
 		    				}
 		    				//TODO: Flip my turn
 		    				break;
+		    			case END:
+		    				int blackScore = Integer.parseInt(msgParts[1]);
+		    				int whiteScore = Integer.parseInt(msgParts[2]);
+		    				if (blackScore == whiteScore) {
+		    					print("There is no winner, it's a draw!");
+		    				} else if (blackScore > whiteScore) {
+		    					print("Black has won with " + blackScore + " to " + whiteScore);
+		    				} else {
+		    					print("White has won with " + whiteScore + " to " + blackScore);
+		    				}
 		    			case CHAT: 
 		    				print(msg);
 		    				break;
