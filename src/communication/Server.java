@@ -94,45 +94,54 @@ public class Server {
         System.out.println(message);
     }
 	
-	public void addToGameLobby(String name, Integer dimention, ClientHandler t) {
-		gameLobby.put(name, dimention);
+	public void addToGameLobby(Integer dimention, ClientHandler t) {
+		gameLobby.put(t.getClientName(), dimention);
 		if (!dimMap.containsKey(dimention)) {
 			dimMap.put(dimention, new HashSet<>());		
 		}
-		dimMap.get(dimention).add(name);
+		dimMap.get(dimention).add(t.getClientName());
 		t.sendMessage(Keyword.WAITING.toString());
-		checkForPair();
+		int key = checkForPair();
+		if (key >= 0) {
+			startGame(key);
+		}
 	}
 	
 	public void removeFromGameLobby(String name) {
 		dimMap.get(gameLobby.get(name)).remove(name);
 		gameLobby.remove(name);
+		System.out.println("Removed");
 	}
-	
-	private void checkForPair() { 
-		for (Integer i : dimMap.keySet()) {
-			if (dimMap.get(i).size() >= 2) {
-				String[] players = dimMap.get(i).toArray(new String[dimMap.size()]);
-				Player p1 = new HumanPlayer(players[0], Stone.BLACK);
-				Player p2 = new HumanPlayer(players[1], Stone.WHITE);
-				Game game = new Game(p1, p2, i);
-				ClientHandler t1 = null;
-				ClientHandler t2 = null;
-				for (ClientHandler t : threads) {
-					if (t.getName().equals(players[0])) {
-						t1 = t;
-					} else if (t.getName().equals(players[1])) {
-						t2 = t;
-					}
-				}
-				game.start(); //TODO: Add this to a new thread
-				games.add(game);
-				t1.sendMessage(Keyword.READY + " " + "black" + " " + players[1] + " " + i);
-				t2.sendMessage(Keyword.READY + " " + "white" + " " + players[0] + " " + i);
-				removeFromGameLobby(players[0]);
-				removeFromGameLobby(players[1]);
+	private void startGame(int key) {
+		String[] players = dimMap.get(key).toArray(new String[dimMap.size()]);
+		Player p1 = new HumanPlayer(players[0], Stone.BLACK);
+		Player p2 = new HumanPlayer(players[1], Stone.WHITE);
+		System.out.println("player " + players[0] + " player " + players[1]);
+		Game game = new Game(p1, p2, key);
+		ClientHandler t1 = null;
+		ClientHandler t2 = null;
+		for (ClientHandler t : threads) {
+			if (t.getClientName().equals(players[0])) {
+				t1 = t;
+			} else if (t.getClientName().equals(players[1])) {
+				t2 = t;
 			}
 		}
+		t1.sendMessage(Keyword.READY + " " + "black" + " " + players[1] + " " + key);
+		t2.sendMessage(Keyword.READY + " " + "white" + " " + players[0] + " " + key);
+		addGame(game, t1, t2);
+		game.start(); 
+		removeFromGameLobby(players[0]);
+		removeFromGameLobby(players[1]);
+	}
+	
+	private int checkForPair() { 
+		for (Integer i : dimMap.keySet()) {
+			if (dimMap.get(i).size() >= 2) {
+				return i;
+			}
+		}
+		return -1;
 	}
 
     
