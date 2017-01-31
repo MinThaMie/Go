@@ -91,18 +91,47 @@ public class ClientHandler extends Thread {
     	shutdown();
 	}
 
-    private void shutdown() {
-        server.removeHandler(this);
-        server.broadcast("[" + clientName + " has left]");
-        try {
-        	in.close();
-        	out.close();
-        } catch (IOException e) {
-    		e.printStackTrace();
-    	} 
-    }
-    
-    public String getClientName() {
-    	return clientName;
-    }
+
+	private Stone stringToStone(String color) {
+		return color.equals("black") ? Stone.BLACK : Stone.WHITE;
+	}
+
+	public boolean checkDimentions(String dimention) {
+		int dim = 0;
+		try {
+			dim = Integer.parseInt(dimention);
+		} catch (NumberFormatException e) {
+			return false;
+		}
+		return 5 <= dim && dim <= 131 && (dim % 2 != 0);
+	}
+
+	public void sendMessage(String msg) {
+		try {
+			out.write(msg);
+			out.newLine();
+			out.flush();
+		} catch (IOException e) {
+			shutdown();
+		}
+	}
+
+	private void shutdown() {
+		server.removeHandler(this);
+		server.broadcast("[" + clientName + " has left]");
+		try {
+			in.close();
+			out.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public String getClientName() {
+		return clientName;
+	}
+
+	public Socket getClientSocket() {
+		return clientSocket;
+	}
 }

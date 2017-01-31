@@ -6,6 +6,10 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 
 import communication.ClientHandler.Keyword;
+import game.Game;
+import game.HumanPlayer;
+import game.Player;
+import game.Stone;
 
 
 public class Client extends Thread {
@@ -24,7 +28,7 @@ public class Client extends Thread {
 			try {
 				port = Integer.parseInt(readString("To which port do you want to connect: ")); 
 			} catch (NumberFormatException e) {
-				print("ERROR: no valid portnummer!");
+				print("ERROR: you did not send a number!");
 			}
 		}
 
@@ -51,12 +55,14 @@ public class Client extends Thread {
 	private Socket sock;
 	private BufferedReader in;
 	private BufferedWriter out;
-
+	private Game game;
+	private String name;
 	/**
 	 * Constructs a Client-object and tries to make a socket connection.
 	 */
 	public Client(String name, InetAddress host, int port)
 			throws IOException {
+		this.name = name;
 		sock = new Socket(host, port);
 		in = new BufferedReader(new InputStreamReader(sock.getInputStream()));
     	out = new BufferedWriter(new OutputStreamWriter(sock.getOutputStream()));
