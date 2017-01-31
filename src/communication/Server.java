@@ -166,5 +166,15 @@ public class Server {
     public void removeHandler(ClientHandler handler) {
         threads.remove(handler);
     }
+    
+    public void kick(ClientHandler handler) {
+    	clientListGames.get(handler).stopGame(); //Stop the game
+    	try {
+    		handler.getClientSocket().close();
+    	} catch (IOException e) {
+    		print("The socket could not be closed");
+    	}
+    	removeHandler(handler); //Remove the handler from the clienthandler list
+    }
 
 }
