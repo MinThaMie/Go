@@ -16,9 +16,11 @@ public class NetworkPlayer extends Player {
 	}
 	
 	public void takeTurn(Board board) {
-		String prompt = "> " + getName() + " (" + getColor().toString() + ")"
-                + ", what do you want to do this turn? MOVE x y, PASS or TABLEFLIP!";
-		String[] commandParts = readString(prompt);
+		
+	}
+	
+	public void takeTurn(Board board, String choice) {
+		String[] commandParts = splitString(choice);
 		System.out.println("command " + commandParts[0]);
 		if (commandParts[0].equals(Keyword.PASS)) {
 			System.out.println("You passed");

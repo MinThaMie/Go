@@ -8,7 +8,7 @@ public class Game extends Thread {
 	public static final int NUMBER_PLAYERS = 2;
 
     private Board board;
-    private Player[] players;
+    private HashMap<String, Player> players;
     private int current;
 	private GoGUIIntegrator gogui;
 	private boolean playing;
@@ -26,15 +26,19 @@ public class Game extends Thread {
 		board = new Board(dim, gogui);
 		boards = new HashSet<>();
         gogui.startGUI();
-        players = new Player[NUMBER_PLAYERS];
-        players[0] = s0;
-        players[1] = s1;
+        players = new HashMap<>();
+        players.put(s0.getName(), s0);
+        players.put(s1.getName(), s1);
         current = 0;
     }
 	
 	public void run() {
-		playing = true;
+		playing = false;
 		play();
+	}
+	
+	public HashMap<String, Player> getPlayers() {
+		return this.players;
 	}
 	
 	public String getCurrentPlayer() {
@@ -43,14 +47,20 @@ public class Game extends Thread {
 	
 	private void play() {
     	this.showBoardState();
-    	while (playing) {
-	    	players[current].takeTurn(board);
-	    	addBoard();
-	    	current = (current == 0) ? 1 : 0;
-	    	this.showBoardState();
-    	}
-    	calculateScore();
     }
+	
+	public void doMove(int x, int y, Stone s) {
+		playing = true;
+		board.setField(x, y, s);
+		addBoard();
+		try {
+    		sleep(1000);
+    	} catch (InterruptedException e) {
+    		System.err.println("I've been summonned but I wanted to sleep");
+    	}
+		current = (current == 0) ? 1 : 0;
+    	this.showBoardState();
+	}
 	
 	public void stopGame() {
 		this.playing = false;
