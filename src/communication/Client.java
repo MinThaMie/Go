@@ -100,11 +100,31 @@ public class Client extends Thread {
 		    				game.start();
 		    				break;
 		    			case VALID: 
-		    				print(msgParts[1] + " made a valid move!");
+		    				String validColor = msgParts[1];
+		    				if (!validColor.equals(color)) {
+			    				print(validColor + " made a valid move!");
+			    				int x = Integer.parseInt(msgParts[2]);
+			    				int y = Integer.parseInt(msgParts[3]);
+			    				Stone s = stringToStone(msgParts[1]);
+			    				game.doMove(x, y, s);
+			    				myTurn = true;
+		    				} else {
+		    					print("You made a valid move! Good for you!");
+		    					myTurn = false;
+		    				}
 		    				//TODO: Flip my turn
 		    				break;
 		    			case CHAT: 
 		    				print(msg);
+		    				break;
+		    			case WARNING: 
+		    				print(msg);
+		    				break;
+		    			case INVALID:
+		    				print(msg);
+		    				break;
+		    			default:
+		    				print("default " + msg);
 		    				break;
     				}
     			} catch	(IllegalArgumentException e) {
