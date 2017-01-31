@@ -72,21 +72,33 @@ public class Client extends Thread {
 	    	String msg;
 	    	while ((msg = in.readLine()) != null) {
 	    		print(msg);
-	    		try {
-    				String[] msgParts = msg.split(" ");
-    				Keyword keyword = Keyword.valueOf(msgParts[0]);
-    				switch (keyword) {
-		    			case WAITING: 
-		    				print("You are in the que waiting for somebody");
-		    				break;
-    				}
-    			} catch	(IllegalArgumentException e) {
-    				sendMessage(Keyword.WARNING + " The server does not now this keyword");
-    			}
+				String[] msgParts = msg.split(" ");
+				Keyword keyword = Keyword.valueOf(msgParts[0]);
+				switch (keyword) {
+	    			case WAITING: 
+	    				print("You are in the que waiting for somebody");
+	    				break;
+	    			case READY: 
+	    				print("You are going to play now :)");
+	    				Stone s1 = stringToStone(msgParts[1]);
+	    				Stone s2 = s1.other();
+	    				Player p1 = new HumanPlayer(name, s1);
+	    				Player p2 = new HumanPlayer(msgParts[2], s2);
+	    				game = new Game(p1, p2, Integer.parseInt(msgParts[3]));
+	    				game.start();
+	    				break;
+	    			default: 
+	    				print("The server provided you with an unknown keyword, you have a problem!");
+        				break;
+				}
 	    	}
 		} catch (IOException e) {
-			System.out.println("Cannot read from socket");
+			System.out.println("Cannot read from serversocket");
 		}
+	}
+	
+	private Stone stringToStone(String color) {
+		return color.equals("black") ? Stone.BLACK : Stone.WHITE;
 	}
 
 	/** send a message to a ClientHandler. */
