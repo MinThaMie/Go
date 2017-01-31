@@ -39,8 +39,10 @@ public class Client extends Thread {
 			client.sendMessage(myName);
 			client.start();
 			
+			
+			//Dit zorgt ervoor dat het direct bij enter naar de client handler wordt gestuurt
 			do {
-				String input = readString("");
+				String input = handleTerminalInput();
 				client.sendMessage(input);
 			} while (true);
 			
@@ -75,7 +77,6 @@ public class Client extends Thread {
 	}
 	
 	public void handleServerInput() {
-		print("Welcome to our chatroom. Type exit to leave");
 		try {
 	    	String msg;
 	    	while ((msg = in.readLine()) != null) {
@@ -100,18 +101,43 @@ public class Client extends Thread {
 		    				break;
 		    			case VALID: 
 		    				print(msgParts[1] + " made a valid move!");
+		    				//TODO: Flip my turn
 		    				break;
 		    			case CHAT: 
 		    				print(msg);
 		    				break;
     				}
     			} catch	(IllegalArgumentException e) {
-    				sendMessage(Keyword.WARNING + " The server gave your a unknown keyword, you have a problem");
+    				print(Keyword.WARNING + " The server gave your a unknown keyword, you have a problem");
     			}
 	    	}
 		} catch (IOException e) {
 			System.out.println("Cannot read from serversocket");
 		}
+	}
+	
+	public static String handleTerminalInput() {
+		String msg = "";
+		try {
+	    	BufferedReader terminalIn = new BufferedReader(new InputStreamReader(
+					System.in));
+	    	while ((msg = terminalIn.readLine()) != null) {
+	    		try {
+    				String[] msgParts = msg.split(" ");
+    				Keyword keyword = Keyword.valueOf(msgParts[0]);
+    				switch (keyword) {
+		    			case MOVE: 
+		    				print(msg);
+		    				break;
+    				}
+    			} catch	(IllegalArgumentException e) {
+    				print(Keyword.WARNING + " you typed something unknow to the server");
+    			}
+	    	}
+		} catch (IOException e) {
+			System.out.println("Cannot read from serversocket");
+		}
+		return msg;
 	}
 	
 	
@@ -163,5 +189,4 @@ public class Client extends Thread {
 
 		return (antw == null) ? "" : antw;
 	}
-
 }
