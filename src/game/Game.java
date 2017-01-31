@@ -37,6 +37,10 @@ public class Game extends Thread {
 		play();
 	}
 	
+	public String getCurrentPlayer() {
+		return current == 0 ? "black" : "white";
+	}
+	
 	private void play() {
     	this.showBoardState();
     	while (playing) {
@@ -45,7 +49,12 @@ public class Game extends Thread {
 	    	current = (current == 0) ? 1 : 0;
 	    	this.showBoardState();
     	}
+    	calculateScore();
     }
+	
+	public void stopGame() {
+		this.playing = false;
+	}
 	
 	public Set<List<Stone>> getHistory() {
 		return this.boards;
