@@ -7,7 +7,7 @@ import java.net.UnknownHostException;
 
 import communication.ClientHandler.Keyword;
 import game.Game;
-import game.HumanPlayer;
+import game.NetworkPlayer;
 import game.Player;
 import game.Stone;
 
@@ -89,17 +89,17 @@ public class Client extends Thread {
 		    				print("You are going to play now :)");
 		    				Stone s1 = stringToStone(msgParts[1]);
 		    				Stone s2 = s1.other();
-		    				Player p1 = new HumanPlayer(name, s1);
-		    				Player p2 = new HumanPlayer(msgParts[2], s2);
+		    				Player p1 = new NetworkPlayer(name, s1);
+		    				Player p2 = new NetworkPlayer(msgParts[2], s2);
 		    				game = new Game(p1, p2, Integer.parseInt(msgParts[3]));
 		    				game.start();
 		    				break;
 		    			case VALID: 
-		    				print("The other made a valid move!");
+		    				print(msgParts[1] + " made a valid move!");
 		    				break;
     				}
     			} catch	(IllegalArgumentException e) {
-    				sendMessage(Keyword.WARNING + " The server does not now this keyword");
+    				sendMessage(Keyword.WARNING + " The server does not now this keyword"); //TODO: rewrite this exception msg
     			}
 	    	}
 		} catch (IOException e) {

@@ -18,10 +18,10 @@ public abstract class Player {
 	public Stone getColor() {
 		return color;
 	}
-	
-    public abstract int determineMove(Board board);
-    
+	    
     public abstract void takeTurn(Board board);
+    
+    public abstract int determineMove(Board board);
 	
 	public void makeMove(Board board) {
 		boardHistory.add(listBoard(board));

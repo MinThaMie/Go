@@ -114,8 +114,8 @@ public class Server {
 	}
 	private void startGame(int key) {
 		String[] players = dimMap.get(key).toArray(new String[dimMap.size()]);
-		Player p1 = new HumanPlayer(players[0], Stone.BLACK);
-		Player p2 = new HumanPlayer(players[1], Stone.WHITE);
+		Player p1 = new NetworkPlayer(players[0], Stone.BLACK);
+		Player p2 = new NetworkPlayer(players[1], Stone.WHITE);
 		System.out.println("player " + players[0] + " player " + players[1]);
 		Game game = new Game(p1, p2, key);
 		ClientHandler t1 = null;
