@@ -29,6 +29,7 @@ public class Server {
     private HashMap<String, Integer> gameLobby;
     private Map<Integer, Set<String>> dimMap;
     private Map<Game, Set<ClientHandler>> gameListClients;
+    private Game game;
     
 	public Server() {
 		while (ssock == null) {
@@ -44,6 +45,7 @@ public class Server {
     	gameLobby = new HashMap<>();
     	dimMap = new HashMap<>();
     	gameListClients = new HashMap<>();
+    	game = null;
     }
 	
 	private Integer askPort() {
@@ -117,7 +119,7 @@ public class Server {
 		Player p1 = new NetworkPlayer(players[0], Stone.BLACK);
 		Player p2 = new NetworkPlayer(players[1], Stone.WHITE);
 		System.out.println("player " + players[0] + " player " + players[1]);
-		Game game = new Game(p1, p2, key);
+		game = new Game(p1, p2, key);
 		ClientHandler t1 = null;
 		ClientHandler t2 = null;
 		for (ClientHandler t : threads) {
