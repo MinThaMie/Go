@@ -57,6 +57,8 @@ public class Client extends Thread {
 	private BufferedWriter out;
 	private Game game;
 	private String name;
+	private String color;
+	private boolean myTurn;
 	/**
 	 * Constructs a Client-object and tries to make a socket connection.
 	 */
@@ -87,7 +89,9 @@ public class Client extends Thread {
 		    				break;
 		    			case READY: 
 		    				print("You are going to play now :)");
-		    				Stone s1 = stringToStone(msgParts[1]);
+		    				color = msgParts[1];
+		    				setMyTurn(color);
+		    				Stone s1 = stringToStone(color);
 		    				Stone s2 = s1.other();
 		    				Player p1 = new NetworkPlayer(name, s1);
 		    				Player p2 = new NetworkPlayer(msgParts[2], s2);
@@ -110,8 +114,13 @@ public class Client extends Thread {
 		}
 	}
 	
-	private Stone stringToStone(String color) {
-		return color.equals("black") ? Stone.BLACK : Stone.WHITE;
+	
+	private void setMyTurn(String c) {
+		myTurn = c.equals("black");
+	}
+	
+	private Stone stringToStone(String c) {
+		return c.equals("black") ? Stone.BLACK : Stone.WHITE;
 	}
 
 	/** send a message to a ClientHandler. */
