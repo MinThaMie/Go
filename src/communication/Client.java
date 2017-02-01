@@ -13,10 +13,11 @@ import game.Stone;
 
 
 public class Client extends Thread {
+	boolean started = true;
+
 	public static void main(String[] args) {
 		InetAddress host = null;
 		int port = 0;
-		
 		while (host == null) {
 			try {
 				host = InetAddress.getByName(readString("To which ip-adress do you want to connect: ")); 
@@ -39,10 +40,10 @@ public class Client extends Thread {
 			client.sendMessage(Keyword.PLAYER + " " + myName);
 			client.start();
 			
-			do {
+			while (client.started) {
 				String input = handleTerminalInput(client);
 				client.sendMessage(input);
-			} while (true);
+			} 
 			
 		} catch (IOException e) {
 			print("ERROR: couldn't construct a client object!");
@@ -233,8 +234,9 @@ public class Client extends Thread {
 	}
 
 	/** close the socket connection. */
-	public void shutdown() {
+	public void shutdown() { //TODO: Fix nullpointerexception
 		print("Closing socket connection...");
+		started = false;
 		try {
 			in.close();
 			System.in.close(); //Might be a bit harsh when someone exits TODO: keep the option open to connect to another server
