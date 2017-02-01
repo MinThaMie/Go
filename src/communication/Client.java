@@ -36,7 +36,7 @@ public class Client extends Thread {
 			String myName = readString("Please tell me your name: ");
 			Client client = new Client(myName, host, port);
 			System.out.println("Im trying to connect to " + host + " and port " + port);
-			client.sendMessage(myName);
+			client.sendMessage(Keyword.PLAYER + " " + myName);
 			client.start();
 			
 			do {
