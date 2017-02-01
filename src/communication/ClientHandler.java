@@ -51,6 +51,7 @@ public class ClientHandler extends Thread {
 					switch (keyword) {
 		    			case EXIT : 
 		    				server.broadcast(Keyword.WARNING + " " + clientName + " has left the server");
+		    				sendMessage(Keyword.EXIT + "");
 		    				shutdown();
 		    				break;
 		    			case GO:

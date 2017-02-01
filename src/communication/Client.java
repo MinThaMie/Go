@@ -59,6 +59,7 @@ public class Client extends Thread {
 	private String name;
 	private String color;
 	private boolean myTurn;
+	private String quitter;
 	/**
 	 * Constructs a Client-object and tries to make a socket connection.
 	 */
@@ -110,26 +111,50 @@ public class Client extends Thread {
 		    					print("You made a valid move! Good for you!");
 		    					myTurn = false;
 		    				}
-		    				//TODO: Flip my turn
 		    				break;
-		    			case END:
+		    			case INVALID:
+		    				quitter = msgParts[1];
+		    				if (quitter.equals(color)) {
+	    						print("You have made an invalid move! You will be kicked from the server");
+	    					} else {
+	    						print("The other one made an invalid move, he will be kicked!");
+	    					}
+		    				break;
+		    			case PASSED:
+		    				String passer = msgParts[1];
+		    				print(passer + "has passed!");
+		    				break;
+		    			case TABLEFLIPPED:
+		    				quitter = msgParts[1];
+		    				print(quitter + " has tableflipped and left!");
+		    				break;
+		    			case END: //TODO: also reset the GUI.
 		    				int blackScore = Integer.parseInt(msgParts[1]);
 		    				int whiteScore = Integer.parseInt(msgParts[2]);
-		    				if (blackScore == whiteScore) {
+		    				if (blackScore == -1) {
+		    					print(quitter + " is a coward and has ended the game!");
+		    					if (quitter.equals(color)) {
+		    						print("You are a sore looser");
+		    					} else {
+		    						print("You won!!!");
+		    					}
+		    				} else if (blackScore == whiteScore) {
 		    					print("There is no winner, it's a draw!");
 		    				} else if (blackScore > whiteScore) {
 		    					print("Black has won with " + blackScore + " to " + whiteScore);
 		    				} else {
 		    					print("White has won with " + whiteScore + " to " + blackScore);
 		    				}
+		    				break;
 		    			case CHAT: 
 		    				print(msg);
 		    				break;
 		    			case WARNING: 
 		    				print(msg);
 		    				break;
-		    			case INVALID:
-		    				print(msg);
+		    			case EXIT: 
+		    				print("You will now exit!");
+		    				shutdown();
 		    				break;
 		    			default:
 		    				print("default " + msg);
@@ -177,7 +202,7 @@ public class Client extends Thread {
 		    				return msg;
     				}
     			} catch	(IllegalArgumentException e) {
-    				print(Keyword.WARNING + " you typed something unknow to the server");
+    				return msg;
     			}
 	    	}
 		} catch (IOException e) {
