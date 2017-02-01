@@ -24,17 +24,7 @@ public class ClientHandler extends Thread {
 		out = new BufferedWriter(new OutputStreamWriter(sockArg.getOutputStream()));
 	}
 
-	public void announce() throws IOException {
-		clientName = in.readLine().toLowerCase();
-		server.broadcast(Keyword.PLAYER + " " + clientName);
-	}
-
 	public void run() {
-		try {
-        	announce();
-		} catch (IOException e) {
-			sendMessage(Keyword.WARNING + " Could not announce your presence!");
-		}
     	String msg;
     	try {
 			while ((msg = in.readLine()) != null) {
@@ -50,6 +40,10 @@ public class ClientHandler extends Thread {
 						moveColor = stoneToString(moveStone);
     				}
 					switch (keyword) {
+						case PLAYER:
+							clientName = msgParts[1];
+							server.broadcast(Keyword.PLAYER + " " + clientName);
+							break;
 		    			case EXIT : 
 		    				server.broadcast(Keyword.WARNING + " " + clientName + " has left the server");
 		    				sendMessage(Keyword.EXIT + "");
