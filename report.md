@@ -1,19 +1,34 @@
-# Go
-## Chapter one
+# Report
+## Coding problems & Design decisions
 Started with board + strategy (random) to have something to easily test some features
 ### Axis
 I've had some issues figuring out the way the axis worked and how my array was filled. The calculation for the translation between indices and coordinates was correct, however it did not seem to work correctly since the array was filled left to right instead of top to bottom. I wrote some hardcoded moves to finally find out en check the way the coordinates and indices worked.
 
 ### Stone: Class or Enum
-The object Stone can be implemented in different ways and depending on your implementation your stone can be either smart or dumb. I started with a ‘’dumb’’ stone, being just an Enum! An Enum allows for easy access on the board. You can also implement functions in an Enum, however if you implement a lot of functions in a enum you might want to make it a class, or at least a really smart enum. I tried that approach, because my board got extremely smart and I thought it might make sense for a stone to know it's liberties and know when to remove itself. Partially due to the recursion problems (as mentioned below and the fact that it didn't really solved any problems I decided to revert this decision, since it's not really relevant for a stone to know all these things, it's more relevant for the game or the board. //TODO: chose game or board
+The object Stone can be implemented in different ways and depending on your implementation your stone can be either smart or dumb. I started with a ‘’dumb’’ stone, being just an Enum! An Enum allows for easy access on the board. You can also implement functions in an Enum, however if you implement a lot of functions in a enum you might want to make it a class, or at least a really smart enum. I tried that approach, because my board got extremely smart and I thought it might make sense for a stone to know it's liberties and know when to remove itself. Partially due to the recursion problems (as mentioned below) and the fact that it didn't really solved any problems I decided to revert this decision, since it's not really relevant for a stone to know all these things, it's more relevant for the game or the board. 
+
+### Board vs Game
+As mentioned above which class knows what is the tricky part of designing an application like this. One major choice was regarding the classes Game and Board. In the beginning my Board-class was extremely smart, and I still think that the Board-class could use a good review to decide if all the functions should stay the way the are, especially functions like: `getLiberties`  and  `getChain` .  Since the function `getTerritoryScore`  is a part of the Game class, you could argue that the previous two should also be part of the Game class instead of the Board-class. I decided that the Game-class needed that last function because the game needs to calculate scores etc. and a board does not need to concern itself with those kind of game mechanics. However the board needs to remove the stones and set stones if that is valid, so in my opinion the board should be able to calculate chains, neighbours and liberties.
 
 ### Recursion errors
+There are multiple ways to solve the problems considered with Go and especially considering the liberties and chains. As I started thinking about the problem of liberties and chains I immediately thought of a recursive solution. In my opinion the way the problem is repeated if a stone with the same color is found just looked a lot like recursion for me. However, the challenge with recursion is to make sure there are no infinite loops. Even though I thought I made a smart decision to keep track of the field where the chain came from I still got into trouble. I decided to keep the chains in a set because sets only contain unique parts, so it’s easy to check whether a function already had been where it wanted to go again.  In the beginning I made a starting function and a more elaborated function for the recursive part, looking something like this in code:  `public Set<Integer> getLiberties(int x, int y, Stone s)`  and  `private Set<Integer> getChainLiberties(int x, int y, Stone s, int prevX, int prevY)` . The second function would be called from the within the first.  I reduced this to one function by merging the two into `getLiberties(int x, int y, Stone s, Set<Integer> liberties)` in which the already collected liberties could be passed into the next call and I did the same for the chain option. I simplified this when I noticed that the liberties functioned the same as chain and liberties are just a check of the neighbours of a chain, so I removed the recursion from the `getLiberties`  and made a function that as able to check all the neighbours of a chain and use this in the liberties-function.
+
+## Process evaluation
+### Learned from my own process
+The first major point I learned from this process was to commit regularly, especially after implementing and testing a certain feature. Committing ensures that you always have a working version on your GitHub and makes it easier to see why it suddenly stopped working.  The second thing I learned, partly related to what was mentioned before is that you should always be careful when you (un-)comment code because this can lead to strange bugs if you (un)comment too much or too less. The third thing, was the fact that you should write tests. Of course this was something that was thought during the module and something you keep in mind, but sometimes it seems easier to hardcode certain steps or cases into your main function, however, this can lead to the problems  previously mentioned. Even though I started to use more and more tests, this also did not always go the way I wanted it, due to some poor copy and pasting. Since the tests often required multiple moves I copy-pasted those, which let to copy paste errors on multiple occasions.
+
+### The protocol
+One of the most tedious things of this project was the protocol. I really liked the fact that there was a special student assistent to do the university protocol session with us. However, due to circumstances Martijn en Mark could not attend this meeting, so we scheduled a meeting on the first day of the project to go over the protocol and maybe make some minor changes based on the requirements of the project. This meeting was relatively difficult because most of us agreed on the protocol as discussed with the student assistent but Martijn and Mark had some remarks. We changed the protocol but during the project we needed to change some more and discuss some more and this was sometimes difficult because people started implementing the protocol and changes meant that they needed to revert work. Luckily, because I was sick, that wasn’t me, but it made the discussion sometimes tricky. In the end there is a protocol everybody did more or less agree too.
+
+### The guide
+Something that  created some problems during the project was the guide provided by the coaches. This guide was partly the same as the guide that was used by the university, which created some confusion. Some of the requirements were university-requirements and not Nedap requirements.  Besides this, some rules and requirements were open for interpretation, such as the Ko-rule and the pass rule. When we asked the coaches about  these things they had to discuss or think of a solution even though most of the questions should have been decided before we started the project. Overall I got the impression that the coaches not always knew why they wrote (or copy pasted) parts of the guide. 
+
+## Code Improvements
 
 
-- [ ] Commit after something works (for example the first time it actually removed something from the gui 19-1)
+- [x] Commit after something works (for example the first time it actually removed something from the gui 19-1)
 - [ ] Who know what and keeps track of which things (for example passes etc);
 - [ ] How to store a boardstate? --> Some things point to the same memory place --> see aantekeningen
-- [ ] Smart board to smart game?? (23-1)
+- [x] Smart board to smart game?? (23-1)
 - [ ] BufferedReaders --> empty --> Networkplayer communication
-- [ ] 
-- [ ] Opdrachtomschrijving + eisen
+- [x] Opdrachtomschrijving + eisen
