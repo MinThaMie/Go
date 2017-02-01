@@ -50,18 +50,18 @@ public class Server {
 	
 	private Integer askPort() {
     	BufferedReader line = new BufferedReader(new InputStreamReader(System.in));
-        System.out.print("On which port do you want your server to run?");
+        print("On which port do you want your server to run?");
         Integer chosenPort = DEFAULT_PORT;
         try {
         	chosenPort = Integer.parseInt(line.readLine());
 		} catch (IOException e) {
-        	System.out.println("There is an error: " + e + " the server will use the default port " + DEFAULT_PORT);
+        	print("There is an error: " + e + " the server will use the default port " + DEFAULT_PORT);
         } catch (NumberFormatException e) {
-        	System.out.println("You did not provide a number, please try again");
+        	print("You did not provide a number, please try again");
         	try {
         		chosenPort = Integer.parseInt(line.readLine());
         	} catch (IOException f) {
-            	System.out.println("There is no reader");
+            	print("There is no reader");
         	}
         }
 		return chosenPort;
@@ -116,13 +116,12 @@ public class Server {
 	public void removeFromGameLobby(String name) {
 		dimMap.get(gameLobby.get(name)).remove(name);
 		gameLobby.remove(name);
-		System.out.println("Removed");
 	}
+	
 	private void startGame(int key) {
 		String[] players = dimMap.get(key).toArray(new String[dimMap.size()]);
 		Player p1 = new NetworkPlayer(players[0], Stone.BLACK);
 		Player p2 = new NetworkPlayer(players[1], Stone.WHITE);
-		System.out.println("player " + players[0] + " player " + players[1]);
 		game = new Game(p1, p2, key);
 		ClientHandler t1 = null;
 		ClientHandler t2 = null;
@@ -205,13 +204,13 @@ public class Server {
     }
     
     public void kick(ClientHandler handler) {
-    	clientListGames.get(handler).stopGame(); //Stop the game
+    	clientListGames.get(handler).stopGame(); 
     	try {
     		handler.getClientSocket().close();
     	} catch (IOException e) {
     		print("The socket could not be closed");
     	}
-    	removeHandler(handler); //Remove the handler from the clienthandler list
+    	removeHandler(handler);
     }
 
 }

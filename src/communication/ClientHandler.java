@@ -3,7 +3,6 @@ package communication;
 import java.io.*;
 import java.net.Socket;
 import java.util.*;
-import communication.ClientHandler.Keyword;
 import game.*;
 
 
@@ -44,9 +43,11 @@ public class ClientHandler extends Thread {
 					String[] msgParts = msg.split(" ");
 					Keyword keyword = Keyword.valueOf(msgParts[0]);
 					Stone moveStone = null;
+					String moveColor = null;
 					if (server.getGame(this) != null) {
 						HashMap<String, Player> players = server.getGame(this).getPlayers();
 						moveStone = players.get(clientName).getColor();
+						moveColor = stoneToString(moveStone);
     				}
 					switch (keyword) {
 		    			case EXIT : 
@@ -69,7 +70,6 @@ public class ClientHandler extends Thread {
 		    			case CHAT: 
 		    				server.broadcast(msg);
 		    				break;
-    			
 		    			case MOVE:
 		    				String color = server.getGame(this).getCurrentPlayer();
 		    				Stone turnStone = stringToStone(color);
@@ -79,30 +79,34 @@ public class ClientHandler extends Thread {
 				    				int y = Integer.parseInt(msgParts[2]);
 				    				
 				    				if (server.getGame(this).isAllowed(x, y, moveStone)) { 
-				    					server.broadcastInGame(this, Keyword.VALID + " " + color +  " " + x + " " + y); 
+				    					server.broadcastInGame(this, Keyword.VALID + " " + moveColor +  " " + x + " " + y); 
 				    					server.getGame(this).doMove(x, y, moveStone);
 				    					server.getGame(this).setPasses(0);
 				    				} else {
-				    					server.broadcastInGame(this, Keyword.INVALID + " " + color + " You did something very wrong, you will be kicked");
+				    					server.broadcastInGame(this, Keyword.INVALID + " " + moveColor + " You did something very wrong, you will be kicked");
 				    					server.kick(this);
 				    					server.broadcastInGame(this, Keyword.END + " -1 -1");
 				    				}
 			    				} catch (NumberFormatException e) {
-			    					server.broadcastInGame(this, Keyword.INVALID + " " + color + 
+			    					server.broadcastInGame(this, Keyword.INVALID + " " + moveColor + 
 			    							" You did not provide a number as coordinate, you will be kicked");
 			    					server.kick(this);
 			    					server.broadcastInGame(this, Keyword.END + " -1 -1");
 			    				}
 		    				} else {
-		    					server.broadcastInGame(this, Keyword.INVALID + " " + color + " You did something very wrong, you will be kicked");
+		    					server.broadcastInGame(this, Keyword.INVALID + " " + moveColor + " You did something very wrong, you will be kicked");
 		    					server.kick(this);
 		    					server.broadcastInGame(this, Keyword.END + " -1 -1");
 		    				}
 	    					break;
 		    			case PASS:
+		    				if (server.getGame(this).getFirstPasser() == null) {
+		    					server.getGame(this).setFirstPasser(moveColor);
+		    				}
 		    				server.getGame(this).setPasses(server.getGame(this).getPasses() + 1);
-		    				server.broadcastInGame(this, Keyword.PASSED + " " + stoneToString(moveStone));
-		    				if (server.getGame(this).getPasses() == 2) {
+		    				server.broadcastInGame(this, Keyword.PASSED + " " + moveColor);
+		    				if ((server.getGame(this).getFirstPasser().equals("black") && server.getGame(this).getPasses() == 2) || 
+		    						server.getGame(this).getPasses() == 3) {
 		    					server.getGame(this).calculateScore();
 		    					int blackScore = server.getGame(this).getScore(Stone.BLACK);
 		    					int whiteScore = server.getGame(this).getScore(Stone.WHITE);

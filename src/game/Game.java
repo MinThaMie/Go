@@ -16,6 +16,7 @@ public class Game extends Thread {
 	private int scoreBlack;
 	private int scoreWhite;
     private int passes;
+    private String firstPasser;
 
 	
 	public Game(int dim) {
@@ -33,6 +34,7 @@ public class Game extends Thread {
         players.put(s1.getName(), s1);
         current = 0;
         passes = 0;
+        firstPasser = null;
     }
 	
 	public void run() {
@@ -67,6 +69,14 @@ public class Game extends Thread {
 	
 	public int getPasses() {
 		return passes;
+	}
+	
+	public void setFirstPasser(String color) {
+		firstPasser = color;
+	}
+	
+	public String getFirstPasser() {
+		return firstPasser;
 	}
 	
 	public void setPasses(int newAmount) {

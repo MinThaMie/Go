@@ -38,6 +38,7 @@ public class Client extends Thread {
 			Client client = new Client(myName, host, port);
 			System.out.println("Im trying to connect to " + host + " and port " + port);
 			client.sendMessage(Keyword.PLAYER + " " + myName);
+
 			client.start();
 			
 			while (client.started) {
@@ -162,7 +163,7 @@ public class Client extends Thread {
 		    				break;
     				}
     			} catch	(IllegalArgumentException e) {
-    				print(Keyword.WARNING + " The server gave your a unknown keyword, you have a problem");
+    				print(Keyword.WARNING + " The server gave your a unknown keyword, you have a problem " + msg);
     			}
 	    	}
 		} catch (IOException e) {
