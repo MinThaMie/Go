@@ -77,18 +77,22 @@ public class Server {
 		}
     	System.out.println("The server is running on port: " + ssock.getLocalPort());
     	while (true) {
-	    	try {
-	    		Socket clientsock;
-	    		clientsock = ssock.accept();
-	    		System.out.println("I've found a client");
-	    		ClientHandler t = new ClientHandler(this, clientsock);
-	    		t.sendMessage(SERVER_WELCOME_MSG);
-	    		addHandler(t);
-	    		t.start();
-	    		
-	    	} catch	(IOException e) {
-		        System.out.println("ERROR: clientsocket causing trouble");
-		    }
+    		if (threads.size() <= 20) {
+		    	try {
+		    		Socket clientsock;
+		    		clientsock = ssock.accept();
+		    		System.out.println("I've found a client");
+		    		ClientHandler t = new ClientHandler(this, clientsock);
+		    		t.sendMessage(SERVER_WELCOME_MSG);
+		    		addHandler(t);
+		    		t.start();
+		    		
+		    	} catch	(IOException e) {
+			        System.out.println("ERROR: clientsocket causing trouble");
+			    }
+    		} else {
+    			System.out.println("CAUTION: The server is full!!!");
+    		}
     	}
     }
 	
