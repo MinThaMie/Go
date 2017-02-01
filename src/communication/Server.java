@@ -175,14 +175,14 @@ public class Server {
     	threads.add(handler);
     }
     
-    public void addGame(Game game, ClientHandler t1, ClientHandler t2) {
-    	clientListGames.put(t1, game);
-    	clientListGames.put(t2, game);
-    	if (!gameListClients.containsKey(game)) {
-    		gameListClients.put(game, new HashSet<>());		
+    public void addGame(Game g, ClientHandler t1, ClientHandler t2) {
+    	clientListGames.put(t1, g);
+    	clientListGames.put(t2, g);
+    	if (!gameListClients.containsKey(g)) {
+    		gameListClients.put(g, new HashSet<>());		
 		}
-    	gameListClients.get(game).add(t1);
-    	gameListClients.get(game).add(t2);
+    	gameListClients.get(g).add(t1);
+    	gameListClients.get(g).add(t2);
 
     }
     
