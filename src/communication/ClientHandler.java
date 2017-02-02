@@ -29,11 +29,17 @@ public class ClientHandler extends Thread {
     	try {
 			while ((msg = in.readLine()) != null) {
 				//What my client sends to the clienthandler
+				ArrayList<String> msgParts = new ArrayList<String>();
 				try {
-					String[] msgParts = msg.split(" ");
-					Keyword keyword = Keyword.valueOf(msgParts[0]);
+					for (String s: msg.split(" ")) {
+						msgParts.add(s);
+					}
+					Keyword keyword = Keyword.valueOf(msgParts.get(0));
 					Stone moveStone = null;
+					Stone turnStone = null;
 					String moveColor = null;
+					String color = null;
+		
 					if (server.getGame(this) != null) {
 						HashMap<String, Player> players = server.getGame(this).getPlayers();
 						moveStone = players.get(clientName).getColor();
@@ -41,7 +47,7 @@ public class ClientHandler extends Thread {
     				}
 					switch (keyword) {
 						case PLAYER:
-							clientName = msgParts[1];
+							clientName = msgParts.get(1);
 							server.broadcast(Keyword.PLAYER + " " + clientName);
 							break;
 		    			case EXIT : 
@@ -50,27 +56,27 @@ public class ClientHandler extends Thread {
 		    				shutdown();
 		    				break;
 		    			case GO:
-		    				if (checkDimentions(msgParts[1])) {
-		    					server.addToGameLobby(Integer.parseInt(msgParts[1]), this);
+		    				if (checkDimentions(msgParts.get(1))) {
+		    					server.addToGameLobby(Integer.parseInt(msgParts.get(1)), this);
 		    				} else {
-		    					sendMessage(Keyword.WARNING + " You did not provide a valid boardsize: " +  msgParts[1]
+		    					sendMessage(Keyword.WARNING + " You did not provide a valid boardsize: " +  msgParts.get(1)
 		    							+ ". The boardsize must be odd and between 4 and 132. Please try again!");
 		    				}
 		    				break;
-		    			case CANCEL: 
+		    			case CANCEL:
 		    				server.removeFromGameLobby(clientName);
-		    				sendMessage(Keyword.CHAT + " Server: you have been removed from the que!");
+		    				sendMessage(Keyword.CHAT + " Server: you have been removed from the queue!");
 		    				break;
 		    			case CHAT: 
-		    				server.broadcast(msg);
+		    				server.broadcast(Keyword.CHAT + " " + clientName + ": " + msgParts.remove(0));
 		    				break;
 		    			case MOVE:
-		    				String color = server.getGame(this).getCurrentPlayer();
-		    				Stone turnStone = stringToStone(color);
+		    				color = server.getGame(this).getCurrentPlayer();
+		    				turnStone = stringToStone(color);
 		    				if (turnStone.equals(moveStone)) {
 			    				try {
-				    				int x = Integer.parseInt(msgParts[1]);
-				    				int y = Integer.parseInt(msgParts[2]);
+				    				int x = Integer.parseInt(msgParts.get(1));
+				    				int y = Integer.parseInt(msgParts.get(2));
 				    				
 				    				if (server.getGame(this).isAllowed(x, y, moveStone)) { 
 				    					server.broadcastInGame(this, Keyword.VALID + " " + moveColor +  " " + x + " " + y); 
