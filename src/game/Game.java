@@ -126,8 +126,6 @@ public class Game extends Thread {
 		Map<Stone, Integer> territoryScore = getTerritoryScore(finalBoard);
 		scoreBlack = scoreBlack + territoryScore.get(Stone.BLACK);
 		scoreWhite = scoreWhite + territoryScore.get(Stone.WHITE);
-
-		// for each empty field check whether it's a territory
 	}
 	
 	private Map<Stone, Integer> getTerritoryScore(List<Stone> finalBoard) {

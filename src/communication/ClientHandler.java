@@ -110,10 +110,7 @@ public class ClientHandler extends Thread {
 		    				server.broadcastInGame(this, Keyword.PASSED + " " + moveColor);
 		    				if ((server.getGame(this).getFirstPasser().equals("black") && server.getGame(this).getPasses() == 2) || 
 		    						server.getGame(this).getPasses() == 3) {
-		    					server.getGame(this).calculateScore();
-		    					int blackScore = server.getGame(this).getScore(Stone.BLACK);
-		    					int whiteScore = server.getGame(this).getScore(Stone.WHITE);
-		    					server.broadcastInGame(this, Keyword.END + " " + blackScore + " " + whiteScore);
+		    					endGame();
 		    				}
 		    				break;
 		    			case TABLEFLIP:
@@ -130,9 +127,18 @@ public class ClientHandler extends Thread {
     	} catch (IOException e) {
     		sendMessage(Keyword.WARNING + " Could not read from Client");
     	}
+    	//server.broadcastInGame(this, Keyword.TABLEFLIPPED + " " + stoneToString(players.get(clientName).getColor()));
+		server.broadcastInGame(this, Keyword.END + " -1 -1");
     	shutdown();
 	}
 
+	
+	private void endGame() {
+		server.getGame(this).calculateScore();
+		int blackScore = server.getGame(this).getScore(Stone.BLACK);
+		int whiteScore = server.getGame(this).getScore(Stone.WHITE);
+		server.broadcastInGame(this, Keyword.END + " " + blackScore + " " + whiteScore);
+	}
 
 	private Stone stringToStone(String color) {
 		return color.equals("black") ? Stone.BLACK : Stone.WHITE;

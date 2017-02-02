@@ -160,8 +160,8 @@ public class Client extends Thread {
 		    					print("Black has won with " + blackScore + " to " + whiteScore);
 		    				} else {
 		    					print("White has won with " + whiteScore + " to " + blackScore);
-		    				}
-		    				resetGUI();
+		    				} 
+		    				print("Type GO with a boardsize to play again");
 		    				break;
 		    			case CHAT: 
 		    				print(msg);
