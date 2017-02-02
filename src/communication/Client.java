@@ -49,7 +49,7 @@ public class Client extends Thread {
 			client.start();
 			
 			while (client.sock.isConnected() && !client.sock.isClosed()) {
-				if (client.player.equals("2")){
+				if (client.player.equals("2")) {
 					if (client.game == null) {
 						String msg = readString("1");
 						client.sendMessage(msg);
@@ -286,10 +286,6 @@ public class Client extends Thread {
 			System.out.println("Cannot read from clientsocket");
 		}
 		return msg;
-	}
-	
-	private void resetGUI() {
-		this.game.getBoard().resetGUI();
 	}
 	
 	/**
