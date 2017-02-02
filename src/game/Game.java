@@ -179,7 +179,6 @@ public class Game extends Thread {
 		return winner;
 	}
 	
-	//TODO: check this with player.TakeTurn
 	public void makeMove(int x, int y, Stone s) {
 		if (isAllowed(x, y, s)) {
 			board.testField(x, y, s);

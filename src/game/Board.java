@@ -34,8 +34,7 @@ public class Board {
 	public boolean isField(int i) {
 		return i >= 0 && i < fields.length;
 	}
-	//TODO: Find out what common practice is with these kind of functions
-	// overloading a function or using the index function
+	
 	public boolean isField(int x, int y) {
 		int index = index(x, y);
 		return isField(index);
@@ -87,7 +86,7 @@ public class Board {
 	 * If the stone chains with another stone it calls the method getChainLiberties.
 	 * @return a set with the indices that are the liberties of a certain stone
 	 */
-	public Set<Integer> getLiberties(int x, int y, Stone s) { //TODO: might be able to remove the liberties here
+	public Set<Integer> getLiberties(int x, int y, Stone s) {
 		Set<Integer> liberties = new HashSet<>();
 		Set<Integer> chain = getChain(x, y, s, new HashSet<>());
 		Set<Integer> neighbours = getNeighbours(chain);
@@ -173,7 +172,7 @@ public class Board {
 		int[] coor = coordinate(i);
 		testField(coor[0], coor[1], s);
 	}
-	//TODO: check how to use getChain + chain neighbours here. Breaks the selfSuicide test
+
 	public void testField(int x, int y, Stone s) {
 		int index = index(x, y);
 		fields[index] = s;

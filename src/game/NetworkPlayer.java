@@ -25,7 +25,7 @@ public class NetworkPlayer extends Player {
 		if (commandParts[0].equals(Keyword.PASS)) {
 			System.out.println("You passed");
 		} else if (commandParts[0].equals(Keyword.TABLEFLIP)) {
-			System.out.println("You wanna go"); //TODO: validate this choice && implement
+			System.out.println("You wanna go");
 		} else if (commandParts[0].equals(Keyword.MOVE.toString())) {
 			if (validateMove(board, commandParts[1], commandParts[2])) {
 				makeMove(board);

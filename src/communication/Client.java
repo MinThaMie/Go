@@ -56,7 +56,7 @@ public class Client extends Thread {
 					}
 					while (client.game != null && client.myTurn) {
 						Player p = client.game.getPlayers().get("random");
-						int move = p.determineMove(client.game.getBoard()); //TODO: implement pass
+						int move = p.determineMove(client.game.getBoard());
 						if (move >= 0) {
 							int[] coor = client.game.getBoard().coordinate(move); 
 	    					client.game.doMove(coor[0], coor[1], client.stringToStone(client.color));
