@@ -22,12 +22,13 @@ public class Server {
   
     }
 	
+	Random randomNum = new Random();
 	private Integer port;
 	private ServerSocket ssock;
     private LinkedList<ClientHandler> threads;
     private HashMap<ClientHandler, Game> clientListGames;
     private HashMap<String, Integer> gameLobby;
-    private Map<Integer, Set<String>> dimMap;
+    private Map<Integer, LinkedList<String>> dimMap;
     private Map<Game, Set<ClientHandler>> gameListClients;
     private Game game;
     
@@ -103,7 +104,7 @@ public class Server {
 	public void addToGameLobby(Integer dimention, ClientHandler t) {
 		gameLobby.put(t.getClientName(), dimention);
 		if (!dimMap.containsKey(dimention)) {
-			dimMap.put(dimention, new HashSet<>());		
+			dimMap.put(dimention, new LinkedList<>());		
 		}
 		dimMap.get(dimention).add(t.getClientName());
 		t.sendMessage(Keyword.WAITING.toString());
@@ -119,25 +120,26 @@ public class Server {
 	}
 	
 	private void startGame(int key) {
-		String[] players = dimMap.get(key).toArray(new String[dimMap.size()]);
-		Player p1 = new NetworkPlayer(players[0], Stone.BLACK);
-		Player p2 = new NetworkPlayer(players[1], Stone.WHITE);
+		LinkedList<String> players = dimMap.get(key);
+		Collections.shuffle(players);
+		Player p1 = new NetworkPlayer(players.get(0), Stone.BLACK);
+		Player p2 = new NetworkPlayer(players.get(1), Stone.WHITE);
 		game = new Game(p1, p2, key, false);
 		ClientHandler t1 = null;
 		ClientHandler t2 = null;
 		for (ClientHandler t : threads) {
-			if (t.getClientName().equals(players[0])) {
+			if (t.getClientName().equals(players.get(0))) {
 				t1 = t;
-			} else if (t.getClientName().equals(players[1])) {
+			} else if (t.getClientName().equals(players.get(1))) {
 				t2 = t;
 			}
 		}
-		t1.sendMessage(Keyword.READY + " " + "black" + " " + players[1] + " " + key);
-		t2.sendMessage(Keyword.READY + " " + "white" + " " + players[0] + " " + key);
+		t1.sendMessage(Keyword.READY + " " + "black" + " " + players.get(1) + " " + key);
+		t2.sendMessage(Keyword.READY + " " + "white" + " " + players.get(0) + " " + key);
 		addGame(game, t1, t2);
 		game.start(); 
-		removeFromGameLobby(players[0]);
-		removeFromGameLobby(players[1]);
+		removeFromGameLobby(players.get(1));
+		removeFromGameLobby(players.get(0));
 	}
 	
 	private int checkForPair() { 
