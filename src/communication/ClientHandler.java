@@ -57,6 +57,10 @@ public class ClientHandler extends Thread {
 							server.broadcast(Keyword.PLAYER + " " + clientName);
 							break;
 		    			case EXIT :
+		    				if (server.getGame(this) != null) {
+		    					server.broadcastInGame(this, Keyword.TABLEFLIPPED + " " + stoneToString(server.getGame(this).getPlayers().get(clientName).getColor()));
+		    					server.broadcastInGame(this, Keyword.END + " -1 -1");
+		    				}
 		    				server.print(clientName + " has left the server");
 		    				server.broadcast(Keyword.WARNING + " " + clientName + " has left the server");
 		    				shutdown();
@@ -130,8 +134,6 @@ public class ClientHandler extends Thread {
     	} catch (IOException e) {
     		sendMessage(Keyword.WARNING + " Could not read from Client");
     	}
-    	//server.broadcastInGame(this, Keyword.TABLEFLIPPED + " " + stoneToString(players.get(clientName).getColor()));
-		server.broadcastInGame(this, Keyword.END + " -1 -1");
     	shutdown();
 	}
 
