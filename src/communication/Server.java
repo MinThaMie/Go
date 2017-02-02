@@ -22,7 +22,6 @@ public class Server {
   
     }
 	
-	Random randomNum = new Random();
 	private Integer port;
 	private ServerSocket ssock;
     private LinkedList<ClientHandler> threads;

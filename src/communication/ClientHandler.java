@@ -48,6 +48,10 @@ public class ClientHandler extends Thread {
 					switch (keyword) {
 						case PLAYER:
 							clientName = msgParts.get(1);
+							if (clientName.length() > 20 || clientName.contains(" ")) {
+								sendMessage("Your name contains a space or is longer then 20 chars, both is not allowed!");
+								server.kick(this);
+							}
 							server.broadcast(Keyword.PLAYER + " " + clientName);
 							break;
 		    			case EXIT : 

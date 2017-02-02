@@ -32,6 +32,10 @@ public class Client extends Thread {
 
 		try {
 			String myName = readString("Please tell me your name: ");
+			while (myName.length() > 20 || myName.contains(" ")) {
+				print("You name is either too long (> 20 chars) or contains a space");
+				myName = readString("Please try again: ");
+			}
 			Client client = new Client(myName, host, port);
 			System.out.println("Im trying to connect to " + host + " and port " + port);
 			client.sendMessage(Keyword.PLAYER + " " + myName);
