@@ -5,6 +5,8 @@ import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
+import com.nedap.go.gui.GoGUIIntegrator;
+
 import communication.ClientHandler.Keyword;
 import game.*;
 
@@ -90,6 +92,7 @@ public class Client extends Thread {
 	private boolean myTurn;
 	private String quitter;
 	private String player;
+	private GoGUIIntegrator gui;
 	/**
 	 * Constructs a Client-object and tries to make a socket connection.
 	 */
@@ -98,6 +101,7 @@ public class Client extends Thread {
 		this.name = name;
 		this.player = player;
 		game = null;
+		gui = new GoGUIIntegrator(true, true, 3);
 		sock = new Socket(host, port);
 		in = new BufferedReader(new InputStreamReader(sock.getInputStream()));
     	out = new BufferedWriter(new OutputStreamWriter(sock.getOutputStream()));
@@ -137,7 +141,9 @@ public class Client extends Thread {
 		    					p1 = new ComputerPlayer(s1);
 		    				}
 		    				Player p2 = new NetworkPlayer(msgParts[2], s2);
-		    				game = new Game(p1, p2, Integer.parseInt(msgParts[3]), true);
+		    				gui.clearBoard();
+		    				gui.setBoardSize(Integer.parseInt(msgParts[3]));
+		    				game = new Game(p1, p2, Integer.parseInt(msgParts[3]), gui);
 		    				game.start();
 		    				break;
 		    			case VALID: 
@@ -176,7 +182,7 @@ public class Client extends Thread {
 		    				quitter = msgParts[1];
 		    				print(quitter + " has tableflipped and left!");
 		    				break;
-		    			case END: //TODO: also reset the GUI.
+		    			case END:
 		    				int blackScore = Integer.parseInt(msgParts[1]);
 		    				int whiteScore = Integer.parseInt(msgParts[2]);
 		    				if (blackScore == -1) {
@@ -193,6 +199,7 @@ public class Client extends Thread {
 		    				} else {
 		    					print("White has won with " + whiteScore + " to " + blackScore);
 		    				} 
+		    				gui.clearBoard();
 		    				print("Type GO with a boardsize to play again");
 		    				break;
 		    			case CHAT: 

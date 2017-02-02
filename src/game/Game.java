@@ -24,15 +24,8 @@ public class Game extends Thread {
 		boards = new HashSet<>();
 	}
 	
-	public Game(Player s0, Player s1, int dim, boolean gui) {
-		if (gui) {
-			gogui = new GoGUIIntegrator(true, true, dim);
-	        gogui.startGUI();
-	        board = new Board(dim, gogui);
-		} else {
-			board = new Board(dim);
-		}
-		
+	public Game(Player s0, Player s1, int dim) {
+		board = new Board(dim);
 		boards = new HashSet<>();
         players = new HashMap<>();
         players.put(s0.getName(), s0);
@@ -40,6 +33,14 @@ public class Game extends Thread {
         current = 0;
         passes = 0;
         firstPasser = null;
+	}
+	
+	public Game(Player s0, Player s1, int dim, GoGUIIntegrator gui) {
+		this(s0, s1, dim);
+		board = new Board(dim, gui);
+		this.gogui = gui;
+		gogui.startGUI();
+		
     }
 	
 	public void run() {

@@ -121,7 +121,7 @@ public class Server {
 		Collections.shuffle(players);
 		Player p1 = new NetworkPlayer(players.get(0), Stone.BLACK);
 		Player p2 = new NetworkPlayer(players.get(1), Stone.WHITE);
-		game = new Game(p1, p2, key, false);
+		game = new Game(p1, p2, key);
 		ClientHandler t1 = null;
 		ClientHandler t2 = null;
 		for (ClientHandler t : threads) {
