@@ -90,8 +90,9 @@ public class Client extends Thread {
 		    				print("You are in the que waiting for somebody");
 		    				break;
 		    			case READY: 
-		    				print("You are going to play now :)");
 		    				color = msgParts[1];
+		    				print("You are going to play now :) and you are " + color + " and playing against " + msgParts[2]);
+
 		    				setMyTurn(color);
 		    				Stone s1 = stringToStone(color);
 		    				Stone s2 = s1.other();
@@ -122,9 +123,9 @@ public class Client extends Thread {
 	    						print("The other one made an invalid move, he will be kicked!");
 	    					}
 		    				break;
-		    			case PASSED:
+		    			case PASSED: //TODO: fix that this works only in a turn
 		    				String passer = msgParts[1];
-		    				print(passer + "has passed!");
+		    				print(passer + " has passed!");
 		    				break;
 		    			case TABLEFLIPPED:
 		    				quitter = msgParts[1];
