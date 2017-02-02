@@ -205,12 +205,7 @@ public class Server {
     }
     
     public void kick(ClientHandler handler) {
-    	clientListGames.get(handler).stopGame(); 
-    	try {
-    		handler.getClientSocket().close();
-    	} catch (IOException e) {
-    		print("The socket could not be closed");
-    	}
+		handler.shutdown();
     	removeHandler(handler);
     }
 
