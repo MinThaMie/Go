@@ -11,6 +11,8 @@ You can choose to be an AI by typing 2 if the question is asked. —> this is ha
 ### Play GO
 You can play go by typing GO and a board size that meets the requirements from the [protocol](https://github.com/MinThaMie/GoProtocol) and wait for another client to join that wants to play on the same board size. 
 For further keywords, see the protocol.
+#### Close down the client
+You can leave the server by typing EXIT. To really cancel all the while loops you need to press enter twice after typing EXIT. This will kill your client process.
 
 ### Test the code
 You can run the tests in the test package without any terminal input.
