@@ -50,6 +50,9 @@ public class Game extends Thread {
 		return current == 0 ? "black" : "white";
 	}
 	
+	public Board getBoard() {
+		return board;
+	}
 	private void play() {
     	//this.showBoardState();
     }
@@ -64,6 +67,7 @@ public class Game extends Thread {
     		System.err.println("I've been summonned but I wanted to sleep");
     	}
 		current = (current == 0) ? 1 : 0;
+		System.out.println(getCurrentPlayer());
     	//this.showBoardState();
 	}
 	
