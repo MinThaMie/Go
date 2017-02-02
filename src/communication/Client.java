@@ -42,7 +42,7 @@ public class Client extends Thread {
 
 			client.start();
 			
-			while (client.started) {
+			while (client.sock.isConnected() && !client.sock.isClosed()) {
 				String input = handleTerminalInput(client);
 				client.sendMessage(input);
 			} 
@@ -169,10 +169,6 @@ public class Client extends Thread {
 		    			case WARNING: 
 		    				print(msg);
 		    				break;
-		    			case EXIT: 
-		    				print("You will now exit!");
-		    				shutdown();
-		    				break;
 		    			default:
 		    				print("default " + msg);
 		    				break;
@@ -207,7 +203,7 @@ public class Client extends Thread {
     				Keyword keyword = Keyword.valueOf(msgParts[0]);
     				switch (keyword) {
 		    			case MOVE: 
-		    				if (client.game != null ){
+		    				if (client.game != null) {
 		    					if (client.myTurn) {
 				    				try {
 					    				int x = Integer.parseInt(msgParts[1]);
@@ -243,6 +239,10 @@ public class Client extends Thread {
 		    			case HINT:
 		    				print(client.askForHint(client.stringToStone(client.color)));
 		    				break;
+		    			case EXIT: 
+		    				print("You will now exit!");
+		    				client.shutdown();
+		    				break;
 		    			default: 
 		    				return msg;
     				}
@@ -251,7 +251,7 @@ public class Client extends Thread {
     			}
 	    	}
 		} catch (IOException e) {
-			System.out.println("Cannot read from serversocket");
+			System.out.println("Cannot read from clientsocket");
 		}
 		return msg;
 	}
@@ -298,14 +298,14 @@ public class Client extends Thread {
 	}
 
 	/** close the socket connection. */
-	public void shutdown() { //TODO: Fix nullpointerexception
-		print("Closing socket connection...");
-		started = false;
+	public void shutdown() {
+		print("You have shutted down!");
 		try {
 			in.close();
-			System.in.close(); //Might be a bit harsh when someone exits TODO: keep the option open to connect to another server
+			System.in.close();
 			out.close();
 			sock.close();
+			System.exit(0); //TODO: Does not really work yet :( 
 		} catch (IOException e) {
 			System.out.println("Could not close the reader, writer or socket");
 		}

@@ -13,7 +13,7 @@ public class Go {
 		Go go = new Go();
     	Player p1 = new HumanPlayer(go.askName(), Stone.BLACK);
     	Player p2 = new HumanPlayer(go.askName(), Stone.WHITE);
-    	Game game = new Game(p1, p2, go.askBoardSize());
+    	Game game = new Game(p1, p2, go.askBoardSize(), true);
     	game.start();
 	}
 	private String askName() {

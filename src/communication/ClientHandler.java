@@ -54,9 +54,8 @@ public class ClientHandler extends Thread {
 							}
 							server.broadcast(Keyword.PLAYER + " " + clientName);
 							break;
-		    			case EXIT : 
+		    			case EXIT : //Is never send to the server
 		    				server.broadcast(Keyword.WARNING + " " + clientName + " has left the server");
-		    				sendMessage(Keyword.EXIT + "");
 		    				shutdown();
 		    				break;
 		    			case GO:
@@ -163,7 +162,7 @@ public class ClientHandler extends Thread {
 		}
 	}
 
-	private void shutdown() {
+	public void shutdown() {
 		server.removeHandler(this);
 		server.broadcast(Keyword.CHAT + " [" + clientName + " has left]");
 		try {

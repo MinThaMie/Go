@@ -81,12 +81,10 @@ public class Server {
 		    	try {
 		    		Socket clientsock;
 		    		clientsock = ssock.accept();
-		    		System.out.println("I've found a client");
 		    		ClientHandler t = new ClientHandler(this, clientsock);
 		    		t.sendMessage(SERVER_WELCOME_MSG);
 		    		addHandler(t);
-		    		t.start();
-		    		
+		    		t.start();   
 		    	} catch	(IOException e) {
 			        System.out.println("ERROR: clientsocket causing trouble");
 			    }

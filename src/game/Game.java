@@ -185,14 +185,6 @@ public class Game extends Thread {
 			System.out.println("You have been removed from the server");
 		}
 	}
-	
-    /**
-     * Prints the game situation.
-     */
-    private void showBoardState() {
-        System.out.println("\ncurrent game situation: \n\n" + Arrays.toString(board.getFields())
-                + "\n");
-    }
     
     //----Rules----
     
