@@ -88,10 +88,10 @@ public class Client extends Thread {
 					String input = handleTerminalInput(client);
 					client.sendMessage(input);
 				}
-			} 		
+			} 
+			client.shutdown();
 		} catch (IOException e) {
 			print("ERROR: couldn't construct a client object!");
-			System.exit(0);
 		}
 
 	}
@@ -294,8 +294,7 @@ public class Client extends Thread {
 		    				break;
 		    			case EXIT: 
 		    				print("You will now exit!");
-		    				client.shutdown();
-		    				break;
+		    				return msg;
 		    			default: 
 		    				return msg;
     				}
