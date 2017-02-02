@@ -18,6 +18,7 @@ public class Server {
 	public static final String SERVER_WELCOME_MSG = "CHAT Welcome to our Server!" + '\n'
 														+ "CHAT You can use the following keywords:" + '\n'
 														+ "CHAT GO boardsize --> To start a game of Go on your chosen size" + '\n'
+														+ "CHAT MOVE int int --> When you are playing go to put down a stone" + '\n'
 														+ "CHAT CHAT message --> Chat with the other people on the server" + '\n'
 														+ "CHAT EXIT --> you leave the server";
 	public static void main(String[] args) {
