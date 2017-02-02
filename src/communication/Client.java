@@ -78,7 +78,13 @@ public class Client extends Thread {
 	public void run() {
 		handleServerInput();
 	}
-	
+	/**
+	 * This function reads the messages send by the server.
+	 * It splits the message into piece so the first piece is the Keyword and depending on the keyword different actions are taken.
+	 * READY starts a game locally for the client
+	 * VALID places a stone on the board if the move was from the opponent because own stone is already placed
+	 * END calculates the score and tells the client who the winner is
+	 */
 	public void handleServerInput() {
 		try {
 	    	String msg;
@@ -124,7 +130,7 @@ public class Client extends Thread {
 	    						print("The other one made an invalid move, he will be kicked!");
 	    					}
 		    				break;
-		    			case PASSED: //TODO: fix that this works only in a turn
+		    			case PASSED:
 		    				String passer = msgParts[1];
 		    				if (!passer.equals(color)) {
 		    					print(passer + " has passed!");
@@ -179,7 +185,17 @@ public class Client extends Thread {
 			System.out.println("Cannot read from serversocket");
 		}
 	}
-	
+	/**
+	 * Because not all terminalInput should be send directly to the server this function checks the input.
+	 * Because it needs to do this in the main it's a static function and the client object is passed along to access the methods and properties.
+	 * The three keywords that should be checked in advance or are not relevant for the server are: MOVE, PASS and HINT.
+	 * The first two need additional checking to limit the chance of a server kick.
+	 * MOVE: check if a move is allowed, otherwise ask again.
+	 * PASS: check if it's your turn, otherwise ask again.
+	 * HINT: just relevant for the player, so not passed to the server at all.
+	 * @param client
+	 * @return
+	 */
 	public static String handleTerminalInput(Client client) {
 		String msg = "";
 		try {
@@ -244,6 +260,10 @@ public class Client extends Thread {
 		this.game.getBoard().resetGUI();
 	}
 	
+	/**
+	 * Checks the board for the first available and allowed intersection an returns this as help message.
+	 * @param s: Stone passed to do the isAllowed check.
+	 */
 	private String askForHint(Stone s) {
 		Board board = this.game.getBoard();
 		for (int x = 0; x < board.getBoardSize(); x++) {
