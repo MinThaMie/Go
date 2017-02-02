@@ -84,7 +84,7 @@ public class Client extends Thread {
     				Keyword keyword = Keyword.valueOf(msgParts[0]);
     				switch (keyword) {
 		    			case WAITING: 
-		    				print("You are in the que waiting for somebody");
+		    				print("You are in the queue waiting for somebody");
 		    				break;
 		    			case READY: 
 		    				color = msgParts[1];

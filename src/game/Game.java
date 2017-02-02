@@ -59,7 +59,6 @@ public class Game extends Thread {
 		return board;
 	}
 	private void play() {
-    	//this.showBoardState();
     }
 	
 	public void doMove(int x, int y, Stone s) {
@@ -76,8 +75,6 @@ public class Game extends Thread {
     		System.err.println("I've been summonned but I wanted to sleep");
     	}
 		current = (current == 0) ? 1 : 0;
-		System.out.println(getCurrentPlayer());
-    	//this.showBoardState();
 	}
 	
 	public int getPasses() {
