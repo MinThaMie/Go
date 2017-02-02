@@ -28,25 +28,37 @@ public class Client extends Thread {
 			}
 		}
 		while (port == 0) {
-			try {
-				port = Integer.parseInt(readString("To which port do you want to connect: ")); 
-			} catch (NumberFormatException e) {
-				print("ERROR: you did not send a number!");
+			boolean connected = false;
+			while (!connected) {
+				try {
+					port = Integer.parseInt(readString("To which port do you want to connect: ")); 
+				} catch (NumberFormatException e) {
+					print("ERROR: you did not send a number!");
+				}
+				try {
+					Socket testSock = new Socket(host, port);
+					connected = true;
+					testSock.close();
+				} catch (IOException e) {
+					print("You did not choose the correct port");
+				}
 			}
 		}
 
+		
+		String myName = readString("Please tell me your name: ");
+		while (myName.length() > 20 || myName.contains(" ")) {
+			print("You name is either too long (> 20 chars) or contains a space");
+			myName = readString("Please try again: ");
+		}
+		String player = readString("Please tell me, do you to play yourself or let an AI do all the work?" + '\n' +
+				"press 1 if you want to play yourself, and 2 as AI");
+		if (!(player.equals("1") || player.equals("2"))) {
+			print("You did not choose a valid option!");
+			player = readString("Please try again: ");
+		}
+		
 		try {
-			String myName = readString("Please tell me your name: ");
-			while (myName.length() > 20 || myName.contains(" ")) {
-				print("You name is either too long (> 20 chars) or contains a space");
-				myName = readString("Please try again: ");
-			}
-			String player = readString("Please tell me, do you to play yourself or let an AI do all the work?" + '\n' +
-					"press 1 if you want to play yourself, and 2 as AI");
-			if (!(player.equals("1") || player.equals("2"))) {
-				print("You did not choose a valid option!");
-				player = readString("Please try again: ");
-			}
 			Client client = new Client(myName, host, port, player);
 			System.out.println("Im trying to connect to " + host + " and port " + port);
 			client.sendMessage(Keyword.PLAYER + " " + myName);
@@ -76,8 +88,7 @@ public class Client extends Thread {
 					String input = handleTerminalInput(client);
 					client.sendMessage(input);
 				}
-			} 
-			
+			} 		
 		} catch (IOException e) {
 			print("ERROR: couldn't construct a client object!");
 			System.exit(0);
