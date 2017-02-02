@@ -292,7 +292,7 @@ public class Client extends Thread {
 			out.newLine();
 			out.flush();
 		} catch (IOException e) {
-			System.out.println("Could not write to clienthandler");
+			System.out.println("Apperently the server has disconnected, you will also be shut down.");
 			shutdown();
 		}
 	}
@@ -305,7 +305,7 @@ public class Client extends Thread {
 			System.in.close();
 			out.close();
 			sock.close();
-			System.exit(0); //TODO: Does not really work yet :( 
+			System.exit(0);
 		} catch (IOException e) {
 			System.out.println("Could not close the reader, writer or socket");
 		}
