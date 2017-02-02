@@ -4,12 +4,12 @@ public class ComputerPlayer extends Player {
 	Stone color;	
 	Strategy strategy;
 	public ComputerPlayer(Strategy strategy, Stone stone) {
-		super(strategy + "-" + stone, stone);
+		super(strategy + "", stone);
 		this.strategy = strategy;
 	}
 	
 	public ComputerPlayer(Stone stone) {
-		super("random" + "-" + stone, stone);
+		super("random", stone);
 		Strategy random = new RandomStrategy();
 		this.strategy = random;
 	}

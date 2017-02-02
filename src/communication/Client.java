@@ -36,15 +36,41 @@ public class Client extends Thread {
 				print("You name is either too long (> 20 chars) or contains a space");
 				myName = readString("Please try again: ");
 			}
-			Client client = new Client(myName, host, port);
+			String player = readString("Please tell me, do you to play yourself or let an AI do all the work?" + '\n' +
+					"press 1 if you want to play yourself, and 2 as AI");
+			if (!(player.equals("1") || player.equals("2"))) {
+				print("You did not choose a valid option!");
+				player = readString("Please try again: ");
+			}
+			Client client = new Client(myName, host, port, player);
 			System.out.println("Im trying to connect to " + host + " and port " + port);
 			client.sendMessage(Keyword.PLAYER + " " + myName);
 
 			client.start();
 			
 			while (client.sock.isConnected() && !client.sock.isClosed()) {
-				String input = handleTerminalInput(client);
-				client.sendMessage(input);
+				if (client.player.equals("2")){
+					if (client.game == null) {
+						String msg = readString("1");
+						client.sendMessage(msg);
+					}
+					while (client.game != null && client.myTurn) {
+						Player p = client.game.getPlayers().get("random");
+						int move = p.determineMove(client.game.getBoard()); //TODO: implement pass
+						if (move >= 0) {
+							int[] coor = client.game.getBoard().coordinate(move); 
+	    					client.game.doMove(coor[0], coor[1], client.stringToStone(client.color));
+							client.sendMessage(Keyword.MOVE + " " + coor[0] + " " + coor[1]);
+						} else {
+							client.sendMessage(Keyword.PASS + "");
+						}
+						client.myTurn = false;
+					}
+
+				} else {
+					String input = handleTerminalInput(client);
+					client.sendMessage(input);
+				}
 			} 
 			
 		} catch (IOException e) {
@@ -63,12 +89,14 @@ public class Client extends Thread {
 	private String color;
 	private boolean myTurn;
 	private String quitter;
+	private String player;
 	/**
 	 * Constructs a Client-object and tries to make a socket connection.
 	 */
-	public Client(String name, InetAddress host, int port)
+	public Client(String name, InetAddress host, int port, String player)
 			throws IOException {
 		this.name = name;
+		this.player = player;
 		game = null;
 		sock = new Socket(host, port);
 		in = new BufferedReader(new InputStreamReader(sock.getInputStream()));
@@ -99,11 +127,15 @@ public class Client extends Thread {
 		    			case READY: 
 		    				color = msgParts[1];
 		    				print("You are going to play now :) and you are " + color + " and playing against " + msgParts[2]);
-
 		    				setMyTurn(color);
 		    				Stone s1 = stringToStone(color);
 		    				Stone s2 = s1.other();
-		    				Player p1 = new NetworkPlayer(name, s1);
+		    				Player p1 = null;
+		    				if (player.equals("1")) {
+		    					p1 = new NetworkPlayer(name, s1);
+		    				} else {
+		    					p1 = new ComputerPlayer(s1);
+		    				}
 		    				Player p2 = new NetworkPlayer(msgParts[2], s2);
 		    				game = new Game(p1, p2, Integer.parseInt(msgParts[3]), true);
 		    				game.start();

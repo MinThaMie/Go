@@ -6,7 +6,7 @@ import java.util.*;
 public class RandomStrategy implements Strategy {
 	String name;
 	public RandomStrategy() {
-		this.name = "Random";
+		this.name = "random";
 	}
 
 	public String getName() {
@@ -22,11 +22,12 @@ public class RandomStrategy implements Strategy {
 		}
 
 		int size = emptyFields.size();
-		while (emptyFields.size() > 0) {
+		if (emptyFields.size() > 0) {
 			double random = Math.random();
 			int index = (int) (random * size);
 			return emptyFields.get(index);
-		} 
-		return -1;
+		}  else {
+			return -1;
+		}
 	}
 }

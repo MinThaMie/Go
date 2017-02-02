@@ -89,7 +89,7 @@ public class Game extends Thread {
 		return firstPasser;
 	}
 	
-	public void resetPasses(){
+	public void resetPasses() {
 		passes = 0;
 	}
 	
