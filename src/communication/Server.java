@@ -15,7 +15,7 @@ public class Server {
 														+ "CHAT You can use the following keywords:" + '\n'
 														+ "CHAT GO boardsize --> To start a game of Go on your chosen size" + '\n'
 														+ "CHAT CHAT message --> Chat with the other people on the server" + '\n'
-														+ "CHAT EXIT --> you leave the server" + '\n';
+														+ "CHAT EXIT --> you leave the server";
 	public static void main(String[] args) {
         Server server = new Server();
         server.run();

@@ -155,7 +155,7 @@ public class ClientHandler extends Thread {
 
 	private void shutdown() {
 		server.removeHandler(this);
-		server.broadcast("[" + clientName + " has left]");
+		server.broadcast(Keyword.CHAT + " [" + clientName + " has left]");
 		try {
 			in.close();
 			out.close();
