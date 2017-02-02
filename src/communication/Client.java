@@ -201,6 +201,9 @@ public class Client extends Thread {
 		    					print(Keyword.WARNING + " You tried to move before there was a game.");
 		    				}
 		    				break;
+		    			case HINT:
+		    				print(client.askForHint(client.stringToStone(client.color)));
+		    				break;
 		    			default: 
 		    				return msg;
     				}
@@ -214,6 +217,18 @@ public class Client extends Thread {
 		return msg;
 	}
 	
+	private String askForHint(Stone s) {
+		Board board = this.game.getBoard();
+		for (int x = 0; x < board.getBoardSize(); x++) {
+			for (int y = 0; y < board.getBoardSize(); y++) {
+				if (game.isAllowed(x, y, s)) {
+					return "You can put your stone at " + x + " " + y; 
+				}
+			}	
+		}
+		return "There is no move you can do!";
+		
+	}
 	
 	private void setMyTurn(String c) {
 		myTurn = c.equals("black");

@@ -14,7 +14,7 @@ public class ClientHandler extends Thread {
 	private String clientName;
 
 	public enum Keyword {
-		PLAYER, EXIT, GO, WAITING, READY, MOVE, VALID, INVALID, PASS, PASSED, TABLEFLIP, TABLEFLIPPED, CHAT, WARNING, END, CANCEL
+		PLAYER, EXIT, GO, WAITING, READY, MOVE, VALID, INVALID, PASS, PASSED, TABLEFLIP, TABLEFLIPPED, CHAT, WARNING, END, CANCEL, HINT
 	}
 
 	public ClientHandler(Server serverArg, Socket sockArg) throws IOException {
