@@ -122,7 +122,13 @@ public class Client extends Thread {
 		    				break;
 		    			case PASSED: //TODO: fix that this works only in a turn
 		    				String passer = msgParts[1];
-		    				print(passer + " has passed!");
+		    				if (!passer.equals(color)) {
+		    					print(passer + " has passed!");
+			    				myTurn = true;
+		    				} else {
+		    					print("You passed! Good for you!");
+		    					myTurn = false;
+		    				}
 		    				break;
 		    			case TABLEFLIPPED:
 		    				quitter = msgParts[1];
@@ -181,20 +187,35 @@ public class Client extends Thread {
     				Keyword keyword = Keyword.valueOf(msgParts[0]);
     				switch (keyword) {
 		    			case MOVE: 
-		    				if (client.game != null && client.myTurn) {
-			    				try {
-				    				int x = Integer.parseInt(msgParts[1]);
-				    				int y = Integer.parseInt(msgParts[2]);
-				    				
-				    				if (client.game.isAllowed(x, y, client.stringToStone(client.color))) { 
-				    					client.game.doMove(x, y, client.stringToStone(client.color));
-				    					return msg; 
-				    				} else {
-				    					print(Keyword.WARNING + " apperently your chosen field is not valid, please try again!");
+		    				if (client.game != null ){
+		    					if (client.myTurn) {
+				    				try {
+					    				int x = Integer.parseInt(msgParts[1]);
+					    				int y = Integer.parseInt(msgParts[2]);
+					    				
+					    				if (client.game.isAllowed(x, y, client.stringToStone(client.color))) { 
+					    					client.game.doMove(x, y, client.stringToStone(client.color));
+					    					return msg; 
+					    				} else {
+					    					print(Keyword.WARNING + " apperently your chosen field is not valid, please try again!");
+					    				}
+				    				} catch (NumberFormatException e) {
+				    					print(Keyword.WARNING + " you did not provide ints as coordinates, please try again!");
 				    				}
-			    				} catch (NumberFormatException e) {
-			    					print(Keyword.WARNING + " you did not provide ints as coordinates, please try again!");
-			    				}
+		    					} else {
+		    						print(Keyword.WARNING + " You tried to move before your turn.");
+		    					}
+		    				} else {
+		    					print(Keyword.WARNING + " You tried to move before there was a game.");
+		    				}
+		    				break;
+		    			case PASS:
+		    				if (client.game != null) {
+		    					if (client.myTurn) {
+		    						return msg;
+			    				} else {
+			    					print(Keyword.WARNING + " You tried to pass before your turn.");
+			    				} 
 		    				} else {
 		    					print(Keyword.WARNING + " You tried to move before there was a game.");
 		    				}

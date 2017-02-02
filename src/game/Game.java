@@ -85,6 +85,7 @@ public class Game extends Thread {
 	
 	public void setPasses(int newAmount) {
 		passes = newAmount;
+		current = (current == 0) ? 1 : 0;
 	}
 	
 	public void stopGame() {
