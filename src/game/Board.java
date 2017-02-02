@@ -18,6 +18,10 @@ public class Board {
 		this.gui = gogui;
 	}
 	
+	public void resetGUI() {
+		gui.clearBoard();
+	}
+	
 	public Stone[] getFields() {
 		return this.fields;
 	}

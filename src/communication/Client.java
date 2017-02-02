@@ -6,10 +6,7 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 
 import communication.ClientHandler.Keyword;
-import game.Game;
-import game.NetworkPlayer;
-import game.Player;
-import game.Stone;
+import game.*;
 
 
 public class Client extends Thread {
@@ -148,6 +145,7 @@ public class Client extends Thread {
 		    				} else {
 		    					print("White has won with " + whiteScore + " to " + blackScore);
 		    				}
+		    				resetGUI();
 		    				break;
 		    			case CHAT: 
 		    				print(msg);
@@ -215,6 +213,10 @@ public class Client extends Thread {
 			System.out.println("Cannot read from serversocket");
 		}
 		return msg;
+	}
+	
+	private void resetGUI() {
+		this.game.getBoard().resetGUI();
 	}
 	
 	private String askForHint(Stone s) {
