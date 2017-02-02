@@ -13,22 +13,27 @@ public class Game extends Thread {
     private HashMap<String, Player> players;
     private int current;
 	private GoGUIIntegrator gogui;
-	private boolean playing;
 	private Set<List<Stone>> boards;
 	private int scoreBlack;
 	private int scoreWhite;
     private int passes;
     private String firstPasser;
 
-	
+	/**
+	 * Constructor of basic board, used for testing.
+	 * @param dimension of the board
+	 */
 	public Game(int dim) {
 		board = new Board(dim);
 		boards = new HashSet<>();
 	}
 	
+	/**
+	 * Constructor for the server a.o. without a GUI.
+	 * Including players and ways to keep track of the passes and turns.
+	 */
 	public Game(Player s0, Player s1, int dim) {
-		board = new Board(dim);
-		boards = new HashSet<>();
+		this(dim);
         players = new HashMap<>();
         players.put(s0.getName(), s0);
         players.put(s1.getName(), s1);
@@ -37,6 +42,9 @@ public class Game extends Thread {
         firstPasser = null;
 	}
 	
+	/**
+	 * Including the GUI.
+	 */
 	public Game(Player s0, Player s1, int dim, GoGUIIntegrator gui) {
 		this(s0, s1, dim);
 		board = new Board(dim, gui);
@@ -44,11 +52,6 @@ public class Game extends Thread {
 		gogui.startGUI();
 		
     }
-	
-	public void run() {
-		playing = false;
-		play();
-	}
 	
 	public HashMap<String, Player> getPlayers() {
 		return this.players;
@@ -61,11 +64,12 @@ public class Game extends Thread {
 	public Board getBoard() {
 		return board;
 	}
-	private void play() {
-    }
 	
+	/**
+	 * Allows clients and the server to do moves on the game.
+	 * Sleeps 1 second to prevent AIs from making moves to fast.
+	 */
 	public void doMove(int x, int y, Stone s) {
-		playing = true;
 		if (gogui == null) {
 			board.testField(x, y, s);
 		} else {
@@ -101,19 +105,21 @@ public class Game extends Thread {
 		current = (current == 0) ? 1 : 0;
 	}
 	
-	public void stopGame() {
-		this.playing = false;
-	}
-	
 	public Set<List<Stone>> getHistory() {
 		return this.boards;
 	}
 	
+	/**
+	 * Add a board to the history, relevant for Ko.
+	 */
 	public void addBoard() {
 		List<Stone> historyBoard = listBoard();
     	boards.add(historyBoard);
 	}
 	
+	/**
+	 * Creates a deep copy of the board, but as a list to be stored but not used for manipulation.
+	 */
 	public List<Stone> listBoard() {
 		Stone[] currentBoard = board.getFields();
 		List<Stone> historyBoard = new ArrayList<>();
@@ -123,6 +129,9 @@ public class Game extends Thread {
 		return historyBoard;
 	}
 	
+	/**
+	 * Calculates first the amount of white and black stones on the board and then the territories.
+	 */
 	public void calculateScore() {
 		List<Stone> finalBoard = listBoard();
 		int blackStones = Collections.frequency(finalBoard, Stone.BLACK);
@@ -135,6 +144,9 @@ public class Game extends Thread {
 		scoreWhite = scoreWhite + territoryScore.get(Stone.WHITE);
 	}
 	
+	/**
+	 * This function gets all the empty intersections and checks if those are only surrounded by a certain color.
+	 */
 	private Map<Stone, Integer> getTerritoryScore(List<Stone> finalBoard) {
 		Set<Integer> checkedStones = new HashSet<>();
 		Map<Stone, Integer> territoryScore = new HashMap<>();
@@ -152,6 +164,8 @@ public class Game extends Thread {
 				for (int j : stones) {
 					if (firstColor == board.getField(j)) {
 						colorCount++;
+					} else {
+						break;
 					}
 				}
 				if (colorCount == stones.length) {
@@ -169,19 +183,6 @@ public class Game extends Thread {
 			return scoreWhite;
 		}
 	}
-	
-	public String getWinner() {
-		String winner;
-		if (scoreBlack == scoreWhite) {
-			winner = "There is no winner, it's a draw!";
-		} else if (scoreBlack > scoreWhite) {
-			winner = "Black has won!";
-		} else {
-			winner = "White has won";
-		}
-		return winner;
-	}
-	
 	public void makeMove(int x, int y, Stone s) {
 		if (isAllowed(x, y, s)) {
 			board.testField(x, y, s);

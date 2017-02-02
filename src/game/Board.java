@@ -65,7 +65,9 @@ public class Board {
 	public boolean hasLiberties(int x, int y, Stone s) {
 		return getLiberties(x, y, s).size() > 0;
 	}
-	
+	/**
+	 * Returns the chain of the Stone passed to the method and calculates this recursively.
+	 */
 	public Set<Integer> getChain(int x, int y, Stone s, Set<Integer> set) {
 		Set<Integer> chain = new HashSet<>();
 		chain.addAll(set);
@@ -126,10 +128,7 @@ public class Board {
 	}
 	
 	/**
-	 * This function sets a field on the board to the provided stone.
-	 * This function is package private.
-	 * @param i: index of the field
-	 * @param s: the stone placed
+	 *This function sets the board when it's initialized.
 	 */
 	
 	public void setBoard() {
@@ -142,11 +141,7 @@ public class Board {
 		setField(coor[0], coor[1], s);
 	}
 	/**
-	 * This function overloads the function above does the same.
-	 * Uses the index-function to determine the index of the requested point.
-	 * @param x: x-coordinate
-	 * @param y: y-coordinate
-	 * @param s: the stone placed
+	 * Sets the field on the board as well as on the GUI.
 	 */
 	public void setField(int x, int y, Stone s) {
 		int index = index(x, y);
@@ -168,6 +163,9 @@ public class Board {
 		}
 	}
 	
+	/**
+	 * Does the same as the setField method but without the GUI.
+	 */
 	public void testField(int i, Stone s) {
 		int[] coor = coordinate(i);
 		testField(coor[0], coor[1], s);

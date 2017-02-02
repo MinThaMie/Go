@@ -28,8 +28,8 @@ public class ClientHandler extends Thread {
 	public void run() {
     	String msg;
     	try {
+			//What my client sends to the clienthandler is read from in
 			while ((msg = in.readLine()) != null) {
-				//What my client sends to the clienthandler
 				ArrayList<String> msgParts = new ArrayList<String>();
 				try {
 					for (String s: msg.split(" ")) {
@@ -58,7 +58,7 @@ public class ClientHandler extends Thread {
 							break;
 		    			case EXIT :
 		    				if (server.getGame(this) != null) {
-		    					server.broadcastInGame(this, Keyword.TABLEFLIPPED + " " + stoneToString(server.getGame(this).getPlayers().get(clientName).getColor()));
+		    					server.broadcastInGame(this, Keyword.TABLEFLIPPED + " " + moveColor);
 		    					server.broadcastInGame(this, Keyword.END + " -1 -1");
 		    				}
 		    				server.print(clientName + " has left the server");
@@ -66,15 +66,15 @@ public class ClientHandler extends Thread {
 		    				shutdown();
 		    				break;
 		    			case GO:
-		    				if (checkDimentions(msgParts.get(1))) {
-		    					server.addToGameLobby(Integer.parseInt(msgParts.get(1)), this);
+		    				if (checkDimensions(msgParts.get(1))) {
+		    					server.addToGameQueue(Integer.parseInt(msgParts.get(1)), this);
 		    				} else {
 		    					sendMessage(Keyword.WARNING + " You did not provide a valid boardsize: " +  msgParts.get(1)
 		    							+ ". The boardsize must be odd and between 4 and 132. Please try again!");
 		    				}
 		    				break;
 		    			case CANCEL:
-		    				server.removeFromGameLobby(clientName);
+		    				server.removeFromGameQueue(clientName);
 		    				sendMessage(Keyword.CHAT + " Server: you have been removed from the queue!");
 		    				break;
 		    			case CHAT: 
@@ -137,7 +137,9 @@ public class ClientHandler extends Thread {
     	shutdown();
 	}
 
-	
+	/**
+	 * Calculates the score on the server and passes this to the clients playing that game.
+	 */
 	private void endGame() {
 		server.getGame(this).calculateScore();
 		int blackScore = server.getGame(this).getScore(Stone.BLACK);
@@ -153,16 +155,23 @@ public class ClientHandler extends Thread {
 		return stone == Stone.BLACK ? "black" : "white";
 	}
 
-	public boolean checkDimentions(String dimention) {
+	/**
+	 * Validate if the board dimensions meet the requirements.
+	 * Larger then 4, smaller then 132 and odd.
+	 */
+	public boolean checkDimensions(String dimension) {
 		int dim = 0;
 		try {
-			dim = Integer.parseInt(dimention);
+			dim = Integer.parseInt(dimension);
 		} catch (NumberFormatException e) {
 			return false;
 		}
 		return 5 <= dim && dim <= 131 && (dim % 2 != 0);
 	}
-
+	/**
+	 * Sends server message to specific client.
+	 * @param msg
+	 */
 	public void sendMessage(String msg) {
 		try {
 			out.write(msg);

@@ -13,6 +13,8 @@ import player.Player;
 
 public class Server {
 	public static final Integer DEFAULT_PORT = 2772;
+	public static final Integer MAX_CONNECTIONS = 20;
+
 	public static final String SERVER_WELCOME_MSG = "CHAT Welcome to our Server!" + '\n'
 														+ "CHAT You can use the following keywords:" + '\n'
 														+ "CHAT GO boardsize --> To start a game of Go on your chosen size" + '\n'
@@ -28,7 +30,7 @@ public class Server {
 	private ServerSocket ssock;
     private LinkedList<ClientHandler> threads;
     private HashMap<ClientHandler, Game> clientListGames;
-    private HashMap<String, Integer> gameLobby;
+    private HashMap<String, Integer> gameQueue;
     private Map<Integer, LinkedList<String>> dimMap;
     private Map<Game, Set<ClientHandler>> gameListClients;
     private Game game;
@@ -44,7 +46,7 @@ public class Server {
 		}
     	threads = new LinkedList<>();
     	clientListGames = new HashMap<>();
-    	gameLobby = new HashMap<>();
+    	gameQueue = new HashMap<>();
     	dimMap = new HashMap<>();
     	gameListClients = new HashMap<>();
     	game = null;
@@ -54,17 +56,17 @@ public class Server {
     	BufferedReader line = new BufferedReader(new InputStreamReader(System.in));
         print("On which port do you want your server to run?");
         Integer chosenPort = DEFAULT_PORT;
-        try {
-        	chosenPort = Integer.parseInt(line.readLine());
-		} catch (IOException e) {
-        	print("There is an error: " + e + " the server will use the default port " + DEFAULT_PORT);
-        } catch (NumberFormatException e) {
-        	print("You did not provide a number, please try again");
-        	try {
-        		chosenPort = Integer.parseInt(line.readLine());
-        	} catch (IOException f) {
-            	print("There is no reader");
-        	}
+        boolean correctPort = false;
+        while (!correctPort) {
+	        try {
+	        	chosenPort = Integer.parseInt(line.readLine());
+	        	correctPort = true;
+			} catch (IOException e) {
+	        	print("There is an error: " + e + " the server will use the default port " + DEFAULT_PORT);
+	        	correctPort = true;
+	        } catch (NumberFormatException e) {
+	        	print("You did not provide a number, please try again");
+	        }
         }
 		return chosenPort;
 	}
@@ -79,7 +81,7 @@ public class Server {
 		}
     	System.out.println("The server is running on port: " + ssock.getLocalPort());
     	while (true) {
-    		if (threads.size() <= 20) {
+    		if (threads.size() <= MAX_CONNECTIONS) { 
 		    	try {
 		    		Socket clientsock;
 		    		clientsock = ssock.accept();
@@ -100,8 +102,8 @@ public class Server {
         System.out.println(message);
     }
 	
-	public void addToGameLobby(Integer dimension, ClientHandler t) {
-		gameLobby.put(t.getClientName(), dimension);
+	public void addToGameQueue(Integer dimension, ClientHandler t) {
+		gameQueue.put(t.getClientName(), dimension);
 		if (!dimMap.containsKey(dimension)) {
 			dimMap.put(dimension, new LinkedList<>());		
 		}
@@ -113,11 +115,32 @@ public class Server {
 		}
 	}
 	
-	public void removeFromGameLobby(String name) {
-		dimMap.get(gameLobby.get(name)).remove(name);
-		gameLobby.remove(name);
+	public void removeFromGameQueue(String name) {
+		dimMap.get(gameQueue.get(name)).remove(name);
+		gameQueue.remove(name);
 	}
 	
+	/**
+	 * Is called after a person has added the queue to play a game to check whether they chose a boardsize that was 
+	 * already chosen by someone else.
+	 * @return the dimension of the board, that can be used to get both players to start the game.
+	 */
+	private int checkForPair() { 
+		for (Integer i : dimMap.keySet()) {
+			if (dimMap.get(i).size() >= 2) {
+				return i;
+			}
+		}
+		return -1;
+	}
+
+	
+	/**
+	 * If there is a pair with the same boardsize a game is started. 
+	 * First the order becomes random to determine who is white and who is black.
+	 * The game is added to the gameList and they are removed from the queue
+	 * @param key
+	 */
 	private void startGame(int key) {
 		LinkedList<String> players = dimMap.get(key);
 		Collections.shuffle(players);
@@ -137,31 +160,22 @@ public class Server {
 		t2.sendMessage(Keyword.READY + " " + "white" + " " + players.get(0) + " " + key);
 		addGame(game, t1, t2);
 		game.start(); 
-		removeFromGameLobby(players.get(1));
-		removeFromGameLobby(players.get(0));
+		removeFromGameQueue(players.get(1));
+		removeFromGameQueue(players.get(0));
 	}
-	
-	private int checkForPair() { 
-		for (Integer i : dimMap.keySet()) {
-			if (dimMap.get(i).size() >= 2) {
-				return i;
-			}
-		}
-		return -1;
-	}
-
     
     /**
      * Sends a message using the collection of connected ClientHandlers
      * to all connected Clients.
-     * @param msg message that is send
      */
     public synchronized void broadcast(String msg) {
         for (ClientHandler handler : threads) {
         	handler.sendMessage(msg);
         }
     }
-    
+    /**
+     * Some server messages consider only the people in the game, these are send using this function.
+     */
     public synchronized void broadcastInGame(ClientHandler handler, String msg) {
         for (ClientHandler h : gameListClients.get(clientListGames.get(handler))) {
         	h.sendMessage(msg);
@@ -176,6 +190,9 @@ public class Server {
     	threads.add(handler);
     }
     
+    /**
+     * If a game is started by the server it's added to both gamelists.
+     */
     public void addGame(Game g, ClientHandler t1, ClientHandler t2) {
     	clientListGames.put(t1, g);
     	clientListGames.put(t2, g);
@@ -191,8 +208,12 @@ public class Server {
     	return clientListGames.get(t1);
     }
     
+    /**
+     * Remove a game from the collection of Games on the server. 
+     * @param handler ClientHandler that will be removed
+     */
     public void removeGame(ClientHandler t1) {
-    	gameListClients.get(gameLobby.get(t1)).remove(t1);
+    	gameListClients.get(gameQueue.get(t1)).remove(t1);
     	clientListGames.remove(t1);
     }
     
@@ -203,7 +224,9 @@ public class Server {
     public void removeHandler(ClientHandler handler) {
         threads.remove(handler);
     }
-    
+    /**
+     * Kicks a handler if it does something invalid.
+     */
     public void kick(ClientHandler handler) {
 		handler.shutdown();
     	removeHandler(handler);

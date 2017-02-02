@@ -16,6 +16,9 @@ public class RandomStrategy implements Strategy {
 		return this.name;
 	}
 	
+	/**
+	 * Gather all the emptyFields and choose a random one.
+	 */
 	public int determineMove(Board b, Stone s) {
 		List<Integer> emptyFields = new LinkedList<Integer>();
 		for (int i = 0; i < b.getBoardSize() * b.getBoardSize(); i++) {

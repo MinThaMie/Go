@@ -52,7 +52,7 @@ public class Client extends Thread {
 			myName = readString("Please try again: ");
 		}
 		String player = readString("Please tell me, do you to play yourself or let an AI do all the work?" + '\n' +
-				"press 1 if you want to play yourself, and 2 as AI");
+				"press 1 if you want to play yourself, and 2 as AI: ");
 		if (!(player.equals("1") || player.equals("2"))) {
 			print("You did not choose a valid option!");
 			player = readString("Please try again: ");
@@ -74,10 +74,15 @@ public class Client extends Thread {
 					while (client.game != null && client.myTurn) {
 						Player p = client.game.getPlayers().get("random");
 						int move = p.determineMove(client.game.getBoard());
+						Stone s = client.stringToStone(client.color);
 						if (move >= 0) {
 							int[] coor = client.game.getBoard().coordinate(move); 
-	    					client.game.doMove(coor[0], coor[1], client.stringToStone(client.color));
-							client.sendMessage(Keyword.MOVE + " " + coor[0] + " " + coor[1]);
+							if (client.game.isAllowed(coor[0], coor[1], s)) {
+								client.game.doMove(coor[0], coor[1], s);
+								client.sendMessage(Keyword.MOVE + " " + coor[0] + " " + coor[1]);
+							} else {
+								client.sendMessage(Keyword.PASS + "");
+							}
 						} else {
 							client.sendMessage(Keyword.PASS + "");
 						}
@@ -242,8 +247,6 @@ public class Client extends Thread {
 	 * MOVE: check if a move is allowed, otherwise ask again.
 	 * PASS: check if it's your turn, otherwise ask again.
 	 * HINT: just relevant for the player, so not passed to the server at all.
-	 * @param client
-	 * @return
 	 */
 	public static String handleTerminalInput(Client client) {
 		String msg = "";
@@ -365,14 +368,14 @@ public class Client extends Thread {
 	
 	public static String readString(String prompt) {
 		System.out.print(prompt);
-		String antw = null;
+		String msg = null;
 		try {
 			BufferedReader in = new BufferedReader(new InputStreamReader(
 					System.in));
-			antw = in.readLine();
+			msg = in.readLine();
 		} catch (IOException e) {
 		}
 
-		return (antw == null) ? "" : antw;
+		return (msg == null) ? "" : msg;
 	}
 }
