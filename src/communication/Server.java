@@ -100,12 +100,12 @@ public class Server {
         System.out.println(message);
     }
 	
-	public void addToGameLobby(Integer dimention, ClientHandler t) {
-		gameLobby.put(t.getClientName(), dimention);
-		if (!dimMap.containsKey(dimention)) {
-			dimMap.put(dimention, new LinkedList<>());		
+	public void addToGameLobby(Integer dimension, ClientHandler t) {
+		gameLobby.put(t.getClientName(), dimension);
+		if (!dimMap.containsKey(dimension)) {
+			dimMap.put(dimension, new LinkedList<>());		
 		}
-		dimMap.get(dimention).add(t.getClientName());
+		dimMap.get(dimension).add(t.getClientName());
 		t.sendMessage(Keyword.WAITING.toString());
 		int key = checkForPair();
 		if (key >= 0) {
