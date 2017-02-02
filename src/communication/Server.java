@@ -86,7 +86,7 @@ public class Server {
 		    		ClientHandler t = new ClientHandler(this, clientsock);
 		    		t.sendMessage(SERVER_WELCOME_MSG);
 		    		addHandler(t);
-		    		t.start();   
+		    		t.start(); 
 		    	} catch	(IOException e) {
 			        System.out.println("ERROR: clientsocket causing trouble");
 			    }

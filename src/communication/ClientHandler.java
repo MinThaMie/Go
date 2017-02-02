@@ -53,9 +53,11 @@ public class ClientHandler extends Thread {
 								sendMessage("Your name contains a space or is longer then 20 chars, both is not allowed!");
 								server.kick(this);
 							}
+							server.print(clientName + " has joined the server"); 
 							server.broadcast(Keyword.PLAYER + " " + clientName);
 							break;
-		    			case EXIT : //Is never send to the server
+		    			case EXIT :
+		    				server.print(clientName + " has left the server");
 		    				server.broadcast(Keyword.WARNING + " " + clientName + " has left the server");
 		    				shutdown();
 		    				break;
