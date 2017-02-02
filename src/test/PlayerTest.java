@@ -2,6 +2,9 @@ package test;
 
 import static org.junit.Assert.*;
 import game.*;
+import player.HumanPlayer;
+import player.Player;
+
 import org.junit.Before;
 import org.junit.Test;
 

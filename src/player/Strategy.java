@@ -1,4 +1,7 @@
-package game;
+package player;
+
+import game.Board;
+import game.Stone;
 
 public interface Strategy {
 	public String getName();

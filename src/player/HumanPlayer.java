@@ -1,6 +1,9 @@
-package game;
+package player;
 
 import java.io.*;
+
+import game.Board;
+import game.Stone;
 
 public class HumanPlayer extends Player {
 	public static final String EXIT = "exit";

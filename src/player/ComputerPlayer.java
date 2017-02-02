@@ -1,4 +1,7 @@
-package game;
+package player;
+
+import game.Board;
+import game.Stone;
 
 public class ComputerPlayer extends Player {
 	Stone color;	

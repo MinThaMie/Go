@@ -1,4 +1,4 @@
-package game;
+package player;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -6,6 +6,8 @@ import java.io.InputStreamReader;
 import java.util.Arrays;
 
 import communication.ClientHandler.Keyword;
+import game.Board;
+import game.Stone;
 
 public class NetworkPlayer extends Player {
 	private int xCoor;

@@ -1,6 +1,9 @@
-package game;
+package player;
 
 import java.util.*;
+
+import game.Board;
+import game.Stone;
 
 
 public class RandomStrategy implements Strategy {
