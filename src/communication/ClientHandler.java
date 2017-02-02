@@ -4,6 +4,7 @@ import java.io.*;
 import java.net.Socket;
 import java.util.*;
 import game.*;
+import player.Player;
 
 
 public class ClientHandler extends Thread {

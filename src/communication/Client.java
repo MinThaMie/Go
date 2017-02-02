@@ -9,6 +9,9 @@ import com.nedap.go.gui.GoGUIIntegrator;
 
 import communication.ClientHandler.Keyword;
 import game.*;
+import player.ComputerPlayer;
+import player.NetworkPlayer;
+import player.Player;
 
 
 public class Client extends Thread {

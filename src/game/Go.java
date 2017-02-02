@@ -4,6 +4,9 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
+import player.HumanPlayer;
+import player.Player;
+
 public class Go {
 	private final static int DEFAULT_SIZE = 9;
 	public Go() {

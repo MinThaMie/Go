@@ -3,6 +3,8 @@ package game;
 import java.util.*;
 import com.nedap.go.gui.GoGUIIntegrator;
 
+import player.Player;
+
 public class Game extends Thread {
 	
 	public static final int NUMBER_PLAYERS = 2;

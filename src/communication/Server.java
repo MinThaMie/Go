@@ -8,6 +8,8 @@ import java.util.*;
 
 import communication.ClientHandler.Keyword;
 import game.*;
+import player.NetworkPlayer;
+import player.Player;
 
 public class Server {
 	public static final Integer DEFAULT_PORT = 2772;
