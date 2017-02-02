@@ -122,7 +122,7 @@ public class Server {
 		String[] players = dimMap.get(key).toArray(new String[dimMap.size()]);
 		Player p1 = new NetworkPlayer(players[0], Stone.BLACK);
 		Player p2 = new NetworkPlayer(players[1], Stone.WHITE);
-		game = new Game(p1, p2, key);
+		game = new Game(p1, p2, key, false);
 		ClientHandler t1 = null;
 		ClientHandler t2 = null;
 		for (ClientHandler t : threads) {

@@ -24,11 +24,16 @@ public class Game extends Thread {
 		boards = new HashSet<>();
 	}
 	
-	public Game(Player s0, Player s1, int dim) {
-		gogui = new GoGUIIntegrator(true, true, dim);
-		board = new Board(dim, gogui);
+	public Game(Player s0, Player s1, int dim, boolean gui) {
+		if (gui) {
+			gogui = new GoGUIIntegrator(true, true, dim);
+	        gogui.startGUI();
+	        board = new Board(dim, gogui);
+		} else {
+			board = new Board(dim);
+		}
+		
 		boards = new HashSet<>();
-        gogui.startGUI();
         players = new HashMap<>();
         players.put(s0.getName(), s0);
         players.put(s1.getName(), s1);
@@ -59,7 +64,11 @@ public class Game extends Thread {
 	
 	public void doMove(int x, int y, Stone s) {
 		playing = true;
-		board.setField(x, y, s);
+		if (gogui == null) {
+			board.testField(x, y, s);
+		} else {
+			board.setField(x, y, s);
+		}
 		addBoard();
 		try {
     		sleep(1000);

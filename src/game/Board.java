@@ -7,6 +7,7 @@ public class Board {
 	private final int dim;
 	private final Stone[] fields;
 	GoGUIIntegrator gui;
+	
 	public Board(int dim) {
 		this.dim = dim;
     	fields = new Stone[dim * dim];

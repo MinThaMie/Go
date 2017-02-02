@@ -95,7 +95,7 @@ public class Client extends Thread {
 		    				Stone s2 = s1.other();
 		    				Player p1 = new NetworkPlayer(name, s1);
 		    				Player p2 = new NetworkPlayer(msgParts[2], s2);
-		    				game = new Game(p1, p2, Integer.parseInt(msgParts[3]));
+		    				game = new Game(p1, p2, Integer.parseInt(msgParts[3]), true);
 		    				game.start();
 		    				break;
 		    			case VALID: 
