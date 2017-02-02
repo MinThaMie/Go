@@ -84,7 +84,7 @@ public class ClientHandler extends Thread {
 				    				if (server.getGame(this).isAllowed(x, y, moveStone)) { 
 				    					server.broadcastInGame(this, Keyword.VALID + " " + moveColor +  " " + x + " " + y); 
 				    					server.getGame(this).doMove(x, y, moveStone);
-				    					server.getGame(this).setPasses(0);
+				    					server.getGame(this).resetPasses();
 				    				} else {
 				    					server.broadcastInGame(this, Keyword.INVALID + " " + moveColor + " You did something very wrong, you will be kicked");
 				    					server.kick(this);

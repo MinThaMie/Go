@@ -89,6 +89,10 @@ public class Game extends Thread {
 		return firstPasser;
 	}
 	
+	public void resetPasses(){
+		passes = 0;
+	}
+	
 	public void setPasses(int newAmount) {
 		passes = newAmount;
 		current = (current == 0) ? 1 : 0;
